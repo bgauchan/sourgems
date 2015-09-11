@@ -30,6 +30,9 @@ function sourgems_scripts() {
   // Load our main stylesheet.
   wp_enqueue_style( 'style', get_stylesheet_uri() );
   wp_enqueue_script( 'jquery' );
+
+	wp_register_script( 'sourgems-script', get_template_directory_uri() . '/app.js', array(), '20150910', true );
+	wp_enqueue_script( 'sourgems-script' );
 }
 add_action( 'wp_enqueue_scripts', 'sourgems_scripts' );
 
