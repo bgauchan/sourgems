@@ -1,16 +1,16 @@
-var React = require('react');
 
-var HomePage = React.createClass({
-  render: function () {
+var React = require('react');
+var Nav = require('./nav.jsx');
+
+var App = React.createClass({
+  render: function() {
     return (
       <div>
-          <h1>YOLO</h1>
+        <h1>HELLO VENUS</h1>
+        <Nav />
       </div>
     );
   }
 });
 
-React.render(
-    <HomePage />,
-    document.getElementById('main')
-);
+React.render( <App />, document.getElementById('main') );
