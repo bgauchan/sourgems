@@ -1,1 +1,1 @@
-img{height:100%;width:100%}
+.content,.sidebar{display:table-cell;height:100vh}body,html{margin:0}.sidebar{background:#1a1a1a;color:#fff;width:20vw;min-width:24rem}.content{width:80vw}nav{background:#00b8c1;color:#fff;height:7rem}img{height:100%;width:100%}

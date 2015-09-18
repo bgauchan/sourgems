@@ -1,5 +1,6 @@
 
 var React = require('react');
+var Sidebar = require('./sidebar.jsx');
 var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
@@ -29,8 +30,11 @@ var App = React.createClass({
   render: function() {
     return (
       <div>
-        <Nav />
-        <Posts data={this.state.data} />
+        <Sidebar />
+        <div className="content">
+          <Nav />
+          <Posts data={this.state.data} />
+        </div>
       </div>
     );
   }
