@@ -2,13 +2,19 @@ var React = require('react');
 
 module.exports = React.createClass({
   render: function() {
+    var postStyle = {
+      width: '200'
+    };
+
     var postNodes = this.props.data.map(function (post) {
       return (
-        <h2>
+        <div className="post" style={postStyle}>
           { post.title }
-        </h2>
+          <div className="content" dangerouslySetInnerHTML={{__html: post.content.rendered}} />
+        </div>
       );
     });
+
     return (
       <div class="all-posts">
         { postNodes }

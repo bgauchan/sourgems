@@ -1,7 +1,8 @@
 // Define some paths.
 var paths = {
   less: ['./less/*.less'],
-  jsx: ['./app/app.jsx']
+  jsx: ['./app/app.jsx'],
+  jsxFiles: ['./app/*.jsx']
 };
 
 var gulp = require('gulp');
@@ -30,7 +31,7 @@ gulp.task('js', function() {
 
 gulp.task('watch', function() {
   gulp.watch('./less/*.less', ['less']);
-  gulp.watch(paths.jsx, ['js']);
+  gulp.watch(paths.jsxFiles, ['js']);
 });
 
 gulp.task('default', ['less', 'js', 'watch']);

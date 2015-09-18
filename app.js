@@ -80,13 +80,19 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
+    var postStyle = {
+      width: '200'
+    };
+
     var postNodes = this.props.data.map(function (post) {
       return (
-        React.createElement("h2", null, 
-           post.title
+        React.createElement("div", {className: "post", style: postStyle}, 
+           post.title, 
+          React.createElement("div", {className: "content", dangerouslySetInnerHTML: {__html: post.content.rendered}})
         )
       );
     });
+
     return (
       React.createElement("div", {class: "all-posts"}, 
          postNodes 
