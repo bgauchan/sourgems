@@ -4,7 +4,9 @@ module.exports = React.createClass({
   render: function() {
     return (
       <nav className="main-nav">
-        <h3>SOURGEMS</h3>
+        <section className="container">
+          <h3>SOURGEMS</h3>
+        </section>
       </nav>
     );
   }

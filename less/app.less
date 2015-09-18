@@ -5,19 +5,29 @@ html {
   margin: 0;
 }
 
+body {
+  background: @background-color;
+}
+
+p {
+  word-wrap: break-word;
+}
+
+.app {
+  display: flex;
+}
+
 .sidebar {
   background: darken(@dark-grey, 10);
   color: white;
-  display: table-cell;
   height: 100vh;
-  width: 20vw;
+  width: 16vw;
   min-width: 24rem;
 }
 
 .content {
-  display: table-cell;
   height: 100vh;
-  width: 80vw;
+  width: 84vw;
 }
 
 nav {
@@ -28,5 +38,14 @@ nav {
 
 img {
   height: 100%;
+  width: 100%;
+}
+
+.container {
+  box-sizing: border-box;
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: space-between;
+  padding: 2%;
   width: 100%;
 }

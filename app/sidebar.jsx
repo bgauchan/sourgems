@@ -3,9 +3,9 @@ var React = require('react');
 module.exports = React.createClass({
   render: function() {
     return (
-      <div className="sidebar">
+      <section className="sidebar">
         <h3>SIDEBAR</h3>
-      </div>
+      </section>
     );
   }
 });
