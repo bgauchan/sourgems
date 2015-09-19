@@ -32,7 +32,7 @@ var App = React.createClass({displayName: "App",
     return (
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, null), 
-        React.createElement("div", {className: "content"}, 
+        React.createElement("section", {className: "content"}, 
           React.createElement(Nav, null), 
           React.createElement(Posts, {data: this.state.data})
         )

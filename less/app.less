@@ -14,24 +14,27 @@ p {
 }
 
 .app {
-  display: flex;
+  display: table;
 }
 
 .sidebar {
   background: darken(@dark-grey, 10);
   color: white;
+  display: table-cell;
   height: 100vh;
   width: 16vw;
   min-width: 24rem;
 }
 
 .content {
+  display: table-cell;
   height: 100vh;
   width: 84vw;
 }
 
 nav {
-  background: @primary-color;
+  background: white;
+  box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.04);
   color: white;
   height: 7rem;
 }
@@ -43,7 +46,12 @@ img {
 
 .container {
   box-sizing: border-box;
-	display: flex;
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex;
+  -webkit-flex-wrap: wrap; /* Safari 6.1+ */
   flex-wrap: wrap;
   font-size: 0;
   padding: 0 2%;
@@ -51,5 +59,5 @@ img {
 }
 
 .all-posts {
-  padding: 2%;
+  padding: 1%;
 }

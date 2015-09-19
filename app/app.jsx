@@ -31,10 +31,10 @@ var App = React.createClass({
     return (
       <div className="app">
         <Sidebar />
-        <div className="content">
+        <section className="content">
           <Nav />
           <Posts data={this.state.data} />
-        </div>
+        </section>
       </div>
     );
   }
