@@ -5,7 +5,6 @@ module.exports = React.createClass({
     return (
       <nav className="main-nav">
         <section className="container">
-          <h3>SOURGEMS</h3>
         </section>
       </nav>
     );

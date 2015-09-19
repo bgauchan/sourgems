@@ -73,8 +73,7 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("nav", {className: "main-nav"}, 
-        React.createElement("section", {className: "container"}, 
-          React.createElement("h3", null, "SOURGEMS")
+        React.createElement("section", {className: "container"}
         )
       )
     );
@@ -129,9 +128,17 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
+    var logoUrl = themeUrl + "/images/logo.png"
     return (
       React.createElement("section", {className: "sidebar"}, 
-        React.createElement("h3", null, "SIDEBAR")
+        React.createElement("div", {className: "logo"}, 
+          React.createElement("img", {src:  logoUrl, alt: "logo"})
+        ), 
+        React.createElement("ul", {className: "links"}, 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Home")
+          )
+        )
       )
     );
   }

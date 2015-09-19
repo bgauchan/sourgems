@@ -2,6 +2,7 @@
 @import 'app.less';
 @import 'app-mq.less';
 @import 'post.less';
+@import 'sidebar.less';
 
 /* Table of contents
 ––––––––––––––––––––––––––––––––––––––––––––––––––
@@ -42,7 +43,8 @@
 @background-color: #F2F5F7;
 
 // Typography
-@font-family: "Raleway", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@header-font-family: "Montserrat", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family: "Lato", "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 // Grid Variables
 @container-width: 1200px;
@@ -70,13 +72,14 @@ body {
   line-height: 1.6;
   font-weight: 400;
   font-family: @font-family;
-  color: @font-color;
+  color: lighten(@dark-grey, 5);
 }
 
 /* Typography
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
 h1, h2, h3, h4, h5, h6 {
+  font-family: @header-font-family;
   margin-top: 0;
   margin-bottom: 2rem;
   font-weight: 300;

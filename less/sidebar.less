@@ -1,0 +1,44 @@
+@import (reference) "style.less";
+
+.sidebar {
+  background: darken(@dark-grey, 10);
+  color: white;
+  display: table-cell;
+  height: 100vh;
+  position: relative;
+  width: 16vw;
+  min-width: 24rem;
+
+  .logo {
+    background: @primary-color;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 6rem;
+    width: 100%;
+    padding: 1.2rem 0;
+
+    img {
+      height: 33px;
+      width: 177px;
+      margin-left: 2rem;
+    }
+  }
+
+  .links {
+    padding-left: 2rem;
+
+    li {
+      list-style-type: none;
+    }
+
+    a {
+      color: @light-grey;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #FE6A5E;
+    }
+  }
+}
