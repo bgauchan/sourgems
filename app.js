@@ -85,10 +85,18 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
+    var content = this.props.data.content.rendered;
+    var title = this.props.data.title.rendered;
+    title = title.replace("&#8217;", "'");
+
+    if (content.length > 240) {
+      content = this.props.data.excerpt.rendered.substring(0, 140) + "...";
+    }
+
     return (
       React.createElement("div", {className: "post"}, 
-        React.createElement("h5", null,  this.props.data.title), 
-        React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: this.props.data.content.rendered}})
+        React.createElement("h5", null,  title ), 
+        React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}})
       )
     );
   }
@@ -136,7 +144,30 @@ module.exports = React.createClass({displayName: "exports",
         ), 
         React.createElement("ul", {className: "links"}, 
           React.createElement("li", null, 
-            React.createElement("a", {href: "/"}, "Home")
+            React.createElement("a", {href: "/", className: "active"}, "Home")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Bookmarks")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Images")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Articles")
+          )
+        ), 
+        React.createElement("ul", {className: "collections"}, 
+          React.createElement("li", null, 
+            React.createElement("h5", null, "COLLECTIONS")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "iPhone UI")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Images")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Articles")
           )
         )
       )

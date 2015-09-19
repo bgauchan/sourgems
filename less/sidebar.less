@@ -25,12 +25,12 @@
     }
   }
 
-  .links {
-    padding-left: 2rem;
+  ul {
+    padding: 0 2rem;
+  }
 
-    li {
-      list-style-type: none;
-    }
+  li {
+    list-style-type: none;
 
     a {
       color: @light-grey;
@@ -39,6 +39,17 @@
 
     a:hover {
       color: #FE6A5E;
+    }
+  }
+
+  a.active {
+    color: #FE6A5E;
+  }
+
+  .links {
+    li:last-child {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid @light-grey;
     }
   }
 }

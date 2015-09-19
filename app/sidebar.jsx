@@ -10,7 +10,30 @@ module.exports = React.createClass({
         </div>
         <ul className="links">
           <li>
-            <a href="/">Home</a>
+            <a href="/" className="active">Home</a>
+          </li>
+          <li>
+            <a href="/">Bookmarks</a>
+          </li>
+          <li>
+            <a href="/">Images</a>
+          </li>
+          <li>
+            <a href="/">Articles</a>
+          </li>
+        </ul>
+        <ul className="collections">
+          <li>
+            <h5>COLLECTIONS</h5>
+          </li>
+          <li>
+            <a href="/">iPhone UI</a>
+          </li>
+          <li>
+            <a href="/">Images</a>
+          </li>
+          <li>
+            <a href="/">Articles</a>
           </li>
         </ul>
       </section>
