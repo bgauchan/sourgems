@@ -41,7 +41,7 @@ var App = React.createClass({
 });
 
 React.render(
-  <App url={url + "/wp-json/wp/v2/posts"} pollInterval={200000} />,
+  <App url={ homeUrl + "/wp-json/wp/v2/posts" } pollInterval={200000} />,
   document.getElementById('main')
 );
 

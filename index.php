@@ -19,6 +19,7 @@
 
 <script type="text/javascript">
 	var themeUrl = '<?= get_bloginfo("template_url"); ?>';
+	var homeUrl = '<?php echo get_site_url(); ?>';
 </script>
 
 <?php wp_head(); ?>
