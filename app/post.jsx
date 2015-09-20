@@ -1,6 +1,9 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  handleClick: function(event) {
+    console.log('You clicked: ');
+  },
   render: function() {
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
@@ -11,8 +14,9 @@ module.exports = React.createClass({
     }
 
     return (
-      <div className="post">
-        <h5>{ title }</h5>
+      <div data-post-id={this.props.data.id} className="post"
+          onClick={this.handleClick}>
+        <h5> {title}</h5>
         <div className="" dangerouslySetInnerHTML={{__html: content}} />
       </div>
     );

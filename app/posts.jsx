@@ -4,7 +4,7 @@ var Post = require('./post.jsx');
 module.exports = React.createClass({
   render: function() {
     var counter = 0;
-    var postNodes = this.props.data.map(function (post) {
+    var posts = this.props.data.map(function (post) {
       return (
         <Post data={post} />
       );
@@ -12,7 +12,7 @@ module.exports = React.createClass({
 
     return (
       <section className="container all-posts">
-        { postNodes }
+        { posts }
       </section>
     );
   }

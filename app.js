@@ -71,7 +71,7 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
-    var collectionNodes = this.props.data.map(function (collection) {
+    var collections = this.props.data.map(function (collection) {
       return (
         React.createElement("li", null, 
           React.createElement("a", {href: "/"},  collection.name)
@@ -83,7 +83,7 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement("li", null, 
           React.createElement("h5", null, "COLLECTIONS")
         ), 
-         collectionNodes 
+         collections 
       )
     );
   }
@@ -107,6 +107,9 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+  handleClick: function(event) {
+    console.log('You clicked: ');
+  },
   render: function() {
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
@@ -117,8 +120,9 @@ module.exports = React.createClass({displayName: "exports",
     }
 
     return (
-      React.createElement("div", {className: "post"}, 
-        React.createElement("h5", null,  title ), 
+      React.createElement("div", {"data-post-id": this.props.data.id, className: "post", 
+          onClick: this.handleClick}, 
+        React.createElement("h5", null, " ", title), 
         React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}})
       )
     );
@@ -132,7 +136,7 @@ var Post = require('./post.jsx');
 module.exports = React.createClass({displayName: "exports",
   render: function() {
     var counter = 0;
-    var postNodes = this.props.data.map(function (post) {
+    var posts = this.props.data.map(function (post) {
       return (
         React.createElement(Post, {data: post})
       );
@@ -140,7 +144,7 @@ module.exports = React.createClass({displayName: "exports",
 
     return (
       React.createElement("section", {className: "container all-posts"}, 
-         postNodes 
+         posts 
       )
     );
   }
