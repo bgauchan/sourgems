@@ -15,6 +15,63 @@ p {
   word-wrap: break-word;
 }
 
+.modal {
+  display: none;
+  background: rgba(30,30,30,0.9);;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100vw;
+  overflow-y: scroll;
+  text-align: center;
+
+  .body {
+    display: inline-block;
+    height: 100vh;
+    width: 94%;
+    max-width: 80rem;
+  }
+
+  h4 {
+    color: white;
+    width: 94%;
+    max-width: 80rem;
+    margin: 3rem auto;
+  }
+
+  .content {
+    border-radius: 2px;
+    background: white;
+    display: inline-block;
+    font-size: 1.6rem;
+    margin-bottom: 3rem;
+    padding: 2rem;
+    text-align: left;
+    width: 100%;
+
+    img {
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  .close-btn {
+    border: 1px solid white;
+    color: white;
+    position: fixed;
+    right: 2rem;
+    top: 2rem;
+
+    &:hover {
+      background: @primary-color;
+      border: 1px solid @primary-color;
+      color: white;
+    }
+  }
+}
+
 .app {
   display: table;
   height: 100vh;

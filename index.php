@@ -40,4 +40,13 @@
 </main><!-- #main -->
 
 </body>
+<section class="modal">
+	<input class="close-btn" type="button" value="CLOSE" onclick="
+		jQuery('.modal').hide();
+		jQuery('body').css('position', 'relative');"/>
+	<div class="body">
+		<h4></h4>
+		<div class="content"></div>
+	</div>
+</section>
 <?php wp_footer(); ?>
