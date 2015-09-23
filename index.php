@@ -28,15 +28,6 @@
 <body>
 <main id="main" class="site-main" role="main">
 
-	<nav id="main-nav">
-	</nav>
-
-	<div id="sidebar" class="sidebar">
-	</div><!-- #sidebar -->
-
-	<div id="primary" class="content-area">
-	</div><!-- #primary -->
-
 </main><!-- #main -->
 
 </body>
