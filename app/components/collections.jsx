@@ -3,9 +3,10 @@ var React = require('react');
 module.exports = React.createClass({
   render: function() {
     var collections = this.props.data.map(function (collection) {
+      var url = homeUrl + "/collections/" + collection.slug;
       return (
         <li>
-          <a href="/">{ collection.name }</a>
+          <a href={url}>{ collection.name }</a>
         </li>
       );
     });

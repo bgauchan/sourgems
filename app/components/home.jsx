@@ -4,12 +4,10 @@ var Sidebar = require('./sidebar.jsx');
 var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
-var url = homeUrl + "/wp-json/wp/v2/posts";
-
-module.exports = React.createClass({
+var Home = React.createClass({
   loadPostsFromServer: function() {
     jQuery.ajax({
-      url: url,
+      url: this.props.url,
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -35,6 +33,14 @@ module.exports = React.createClass({
           <Posts data={this.state.data} />
         </section>
       </div>
+    );
+  }
+});
+
+module.exports = React.createClass({
+  render: function () {
+    return (
+        <Home url={ homeUrl + "/wp-json/wp/v2/posts" } />
     );
   }
 });

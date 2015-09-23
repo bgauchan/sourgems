@@ -2,7 +2,7 @@
 var paths = {
   less: ['./less/*.less'],
   jsx: ['./app/app.jsx'],
-  jsxFiles: ['./app/*.jsx']
+  jsxFiles: ['./app/components/*.jsx']
 };
 
 var gulp = require('gulp');
