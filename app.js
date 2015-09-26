@@ -94,7 +94,8 @@ module.exports = React.createClass({displayName: "exports",
   render: function() {
     return (
       React.createElement("nav", {className: "main-nav"}, 
-        React.createElement("section", {className: "container"}
+        React.createElement("section", {className: "container"}, 
+          React.createElement("h4", null, "Home")
         )
       )
     );

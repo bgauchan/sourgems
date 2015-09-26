@@ -84,9 +84,19 @@ p {
 
 nav {
   background: @primary-color;
-  box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.04);
   color: white;
   height: 6rem;
+  position: relative;
+
+  .container {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  h4 {
+    margin: 0 auto;
+  }
 }
 
 img {
