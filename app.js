@@ -115,19 +115,15 @@ module.exports = React.createClass({displayName: "exports",
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
 
-    // wordpress posts title has wierd issues with single quote
-    // so we convert the code back to single quote
-    title = title.replace("&#8217;", "'");
-
     // use the post excerpt if the content is too long
-    if (content.length > 240) {
-      content = this.props.data.excerpt.rendered.substring(0, 140) + "...";
+    if (content.length > 500) {
+      content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
     }
 
     return (
       React.createElement("div", {"data-post-id": this.props.data.id, className: "post", 
           onClick: this.handleClick}, 
-        React.createElement("h5", null, " ", title), 
+        React.createElement("h5", {dangerouslySetInnerHTML: {__html: title}}), 
         React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}})
       )
     );
