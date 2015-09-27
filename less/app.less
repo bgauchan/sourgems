@@ -54,6 +54,13 @@ p {
       left: 50%;
       min-width: 240px;
       transform: translateX(-50%);
+      height: auto;
+      width: auto;
+      max-width: 100%;
+    }
+
+    p {
+      margin-bottom: 1rem;
     }
   }
 
@@ -106,13 +113,6 @@ img {
 
 .container {
   box-sizing: border-box;
-  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-  display: -ms-flexbox;      /* TWEENER - IE 10 */
-  display: -webkit-flex;     /* NEW - Chrome */
-  display: flex;
-  -webkit-flex-wrap: wrap; /* Safari 6.1+ */
-  flex-wrap: wrap;
   font-size: 0;
   padding: 0 2%;
   width: 100%;
@@ -120,4 +120,11 @@ img {
 
 .all-posts {
   padding: 0.7% 1%;
+
+  column-width: 200px;
+  -webkit-column-width: 200px;
+  -moz-column-width: 200px;
+  column-gap: 10px;
+  -webkit-column-gap: 10px;
+  -moz-column-gap: 10px;
 }

@@ -17,12 +17,15 @@
 <link rel="profile" href="http://gmpg.org/xfn/11">
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 
+<?php wp_head(); ?>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
 <script type="text/javascript">
 	var themeUrl = '<?= get_bloginfo("template_url"); ?>';
 	var homeUrl = '<?php echo get_site_url(); ?>';
-</script>
 
-<?php wp_head(); ?>
+	var jsonUrl = homeUrl + "/wp-json/wp/v2";
+</script>
 </head>
 
 <body>

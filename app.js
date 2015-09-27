@@ -82,7 +82,7 @@ var Home = React.createClass({displayName: "Home",
 module.exports = React.createClass({displayName: "exports",
   render: function () {
     return (
-        React.createElement(Home, {url:  homeUrl + "/wp-json/wp/v2/posts"})
+        React.createElement(Home, {url:  jsonUrl + "/posts"})
     );
   }
 });
@@ -118,7 +118,7 @@ module.exports = React.createClass({displayName: "exports",
 
     // use the post excerpt if the content is too long
     if (content.length > 500) {
-      content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
+      content = this.props.data.excerpt.rendered.substring(0, 300) + "...";
     }
 
     return (

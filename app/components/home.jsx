@@ -40,7 +40,7 @@ var Home = React.createClass({
 module.exports = React.createClass({
   render: function () {
     return (
-        <Home url={ homeUrl + "/wp-json/wp/v2/posts" } />
+        <Home url={ jsonUrl + "/posts" } />
     );
   }
 });
