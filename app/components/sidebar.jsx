@@ -31,7 +31,7 @@ module.exports = React.createClass({
         </div>
         <ul className="links">
           <li>
-            <a href={ homeUrl } className="active">Home</a>
+            <a href={ homeUrl } className="active">All Posts</a>
           </li>
           <li>
             <a href="/">Bookmarks</a>

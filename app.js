@@ -95,7 +95,7 @@ module.exports = React.createClass({displayName: "exports",
     return (
       React.createElement("nav", {className: "main-nav"}, 
         React.createElement("section", {className: "container"}, 
-          React.createElement("h4", null, "Home")
+          React.createElement("h4", null, "All Posts")
         )
       )
     );
@@ -186,7 +186,7 @@ module.exports = React.createClass({displayName: "exports",
         ), 
         React.createElement("ul", {className: "links"}, 
           React.createElement("li", null, 
-            React.createElement("a", {href:  homeUrl, className: "active"}, "Home")
+            React.createElement("a", {href:  homeUrl, className: "active"}, "All Posts")
           ), 
           React.createElement("li", null, 
             React.createElement("a", {href: "/"}, "Bookmarks")
