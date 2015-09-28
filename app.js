@@ -118,7 +118,7 @@ module.exports = React.createClass({displayName: "exports",
 
     // use the post excerpt if the content is too long
     if (content.length > 500) {
-      content = this.props.data.excerpt.rendered.substring(0, 300) + "...";
+      content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
     }
 
     return (

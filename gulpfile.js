@@ -1,6 +1,6 @@
 // Define some paths.
 var paths = {
-  less: ['./less/*.less'],
+  less: ['./less/style.less'],
   jsx: ['./app/app.jsx'],
   jsxFiles: ['./app/components/*.jsx']
 };
