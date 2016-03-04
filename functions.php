@@ -6,8 +6,10 @@
 *
 */
 function admin_css() {
-  echo '<style>
-
+  echo '
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  
+  <style>
   body, td, textarea, input, select { font-family: "Roboto"; }
   #wpadminbar a { font-family: "Roboto"; }
   #wpadminbar { padding: 8px 0; background: #26292c; }

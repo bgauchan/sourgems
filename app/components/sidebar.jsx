@@ -4,7 +4,7 @@ var Collections = require('./collections.jsx');
 module.exports = React.createClass({
   loadCollectionsFromServer: function() {
     jQuery.ajax({
-      url: homeUrl + "/wp-json/wp/v2/terms/category/",
+      url: homeUrl + "/wp-json/wp/v2/categories",
       dataType: 'json',
       cache: false,
       success: function(data) {
