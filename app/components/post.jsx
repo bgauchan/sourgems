@@ -1,6 +1,14 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  // componentDidMount: function() {
+  //   jQuery('.all-posts').masonry({
+  //     itemSelector: '.post',
+  //     columnWidth: '.post',
+  //     percentPosition: true
+  //   });
+  //   jQuery('.all-posts').masonry('reloadItems');
+  // },
   handleClick: function(event) {
     jQuery('body').css('position', 'fixed');
     jQuery('.modal').show();

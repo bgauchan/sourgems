@@ -106,6 +106,14 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+  // componentDidMount: function() {
+  //   jQuery('.all-posts').masonry({
+  //     itemSelector: '.post',
+  //     columnWidth: '.post',
+  //     percentPosition: true
+  //   });
+  //   jQuery('.all-posts').masonry('reloadItems');
+  // },
   handleClick: function(event) {
     jQuery('body').css('position', 'fixed');
     jQuery('.modal').show();
@@ -145,7 +153,7 @@ module.exports = React.createClass({displayName: "exports",
     });
 
     return (
-      React.createElement("section", {className: "container all-posts"}, 
+      React.createElement("div", {className: "container all-posts", ref: "all-posts"}, 
          posts 
       )
     );
@@ -193,6 +201,9 @@ module.exports = React.createClass({displayName: "exports",
           ), 
           React.createElement("li", null, 
             React.createElement("a", {href: "/"}, "Images")
+          ), 
+          React.createElement("li", null, 
+            React.createElement("a", {href: "/"}, "Notes")
           ), 
           React.createElement("li", null, 
             React.createElement("a", {href: "/"}, "Articles")

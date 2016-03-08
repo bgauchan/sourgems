@@ -11,9 +11,9 @@ module.exports = React.createClass({
     });
 
     return (
-      <section className="container all-posts">
+      <div className="container all-posts" ref="all-posts">
         { posts }
-      </section>
+      </div>
     );
   }
 });

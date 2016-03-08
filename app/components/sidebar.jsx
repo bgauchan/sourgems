@@ -40,6 +40,9 @@ module.exports = React.createClass({
             <a href="/">Images</a>
           </li>
           <li>
+            <a href="/">Notes</a>
+          </li>
+          <li>
             <a href="/">Articles</a>
           </li>
         </ul>

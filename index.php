@@ -23,12 +23,13 @@
 
 <?php wp_head(); ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.2/masonry.pkgd.min.js"></script>
+<script src="https://npmcdn.com/masonry-layout@4.0/dist/masonry.pkgd.min.js"></script>
+<script type="text/javascript" src="wp-content/themes/sourgems/jquery.js"></script>
 <script type="text/javascript">
 	var themeUrl = '<?= get_bloginfo("template_url"); ?>';
 	var homeUrl = '<?php echo get_site_url(); ?>';
 
-	var jsonUrl = homeUrl + "/wp-json/wp/v2";
+	var jsonUrl = homeUrl + "/wp-json/wp/v2/posts?per_page=30";
 </script>
 </head>
 
