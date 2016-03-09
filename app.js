@@ -20,6 +20,10 @@ React.render((
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+  handleClick: function(event) {    
+    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id ;
+    this.props.onUrlChange(url);
+  },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
       url: homeUrl + "/wp-json/wp/v2/categories",
@@ -40,28 +44,22 @@ module.exports = React.createClass({displayName: "exports",
     this.loadCollectionsFromServer();
   },
   render: function() {
-    var collections = this.state.data.map(function (collection) {
-      return (
-        React.createElement(Collection, {data: collection, key: collection.id})
-      );
-    });
-
     return (
       React.createElement("ul", {className: "collections"}, 
         React.createElement("li", null, 
-          React.createElement("h5", null, "COLLECTIONS")
+          React.createElement("h5", {onClick: this.handleClick}, "COLLECTIONS")
         ), 
-         collections 
-      )
-    );
-  }
-});
-
-var Collection = React.createClass({displayName: "Collection",
-  render: function() {
-    return (
-      React.createElement("li", null, 
-        React.createElement("a", {href: ""},  this.props.data.name)
+          
+          this.state.data.map(function (collection) {
+            return (
+              React.createElement("li", {key:  collection.id}, 
+                React.createElement("span", {id:  collection.id, onClick:  this.handleClick}, 
+                   collection.name
+                )
+              )
+            );
+          }.bind(this))
+        
       )
     );
   }
@@ -99,19 +97,14 @@ var Home = React.createClass({displayName: "Home",
       data: []
     };
   },
-  componentDidMount: function() {
-  },
   render: function() {
     this.loadPostsFromServer();
     return (
       React.createElement("div", {className: "app"}, 
-        React.createElement(Sidebar, {
-          jsonUrl:  this.state.jsonUrl, 
-          onUrlChange:  this.handleUrlChange}
-        ), 
+        React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, null), 
-          React.createElement(Posts, {data:  this.state.data, jsonUrl:  this.state.jsonUrl})
+          React.createElement(Posts, {data: this.state.data, jsonUrl: this.state.jsonUrl})
         )
       )
     );
@@ -242,17 +235,20 @@ var Links = require('./links.jsx');
 var Collections = require('./collections.jsx');
 
 module.exports = React.createClass({displayName: "exports",
+  handleClick: function(event) {    
+    var url = jsonUrl + "/posts?per_page=30";
+    this.props.onUrlChange(url);
+  },
   render: function() {
     return (
       React.createElement("section", {className: "sidebar"}, 
         React.createElement("div", {className: "logo"}, 
           React.createElement("img", {src:  themeUrl + "/images/logo.png", alt: "logo"})
         ), 
-        React.createElement(Links, {
-          jsonUrl:  this.props.jsonUrl, 
-          onUrlChange: this.props.onUrlChange}
+        React.createElement("ul", {className: "links"}, 
+          React.createElement("li", null, " ", React.createElement("h5", {onClick: this.handleClick}, "All Posts"), " ")
         ), 
-        React.createElement(Collections, null)
+        React.createElement(Collections, {onUrlChange: this.props.onUrlChange})
       )
     );
   }

@@ -2,6 +2,10 @@
 var React = require('react');
 
 module.exports = React.createClass({
+  handleClick: function(event) {    
+    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id ;
+    this.props.onUrlChange(url);
+  },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
       url: homeUrl + "/wp-json/wp/v2/categories",
@@ -22,29 +26,23 @@ module.exports = React.createClass({
     this.loadCollectionsFromServer();
   },
   render: function() {
-    var collections = this.state.data.map(function (collection) {
-      return (
-        <Collection data={collection} key={collection.id} />
-      );
-    });
-
     return (
       <ul className="collections">
         <li>
-          <h5>COLLECTIONS</h5>
+          <h5 onClick={this.handleClick}>COLLECTIONS</h5>
         </li>
-        { collections }
+        {  
+          this.state.data.map(function (collection) {
+            return (
+              <li key={ collection.id }>
+                <span id={ collection.id } onClick={ this.handleClick }>
+                  { collection.name }
+                </span>
+              </li>
+            );
+          }.bind(this))
+        }
       </ul>
-    );
-  }
-});
-
-var Collection = React.createClass({
-  render: function() {
-    return (
-      <li>
-        <a href="">{ this.props.data.name }</a>
-      </li>
     );
   }
 });

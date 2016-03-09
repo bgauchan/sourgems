@@ -29,19 +29,14 @@ var Home = React.createClass({
       data: []
     };
   },
-  componentDidMount: function() {
-  },
   render: function() {
     this.loadPostsFromServer();
     return (
       <div className="app">
-        <Sidebar 
-          jsonUrl={ this.state.jsonUrl }
-          onUrlChange={ this.handleUrlChange }
-        />
+        <Sidebar onUrlChange={this.handleUrlChange} />
         <section className="content">
           <Nav />
-          <Posts data={ this.state.data } jsonUrl={ this.state.jsonUrl }/>
+          <Posts data={this.state.data} jsonUrl={this.state.jsonUrl}/>
         </section>
       </div>
     );

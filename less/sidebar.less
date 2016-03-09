@@ -33,12 +33,13 @@
   li {
     list-style-type: none;
 
-    a {
+    span {
       color: @light-grey;
       text-decoration: none;
+      cursor: pointer;
     }
 
-    a:hover {
+    span:hover {
       color: #FE6A5E;
     }
   }
@@ -48,8 +49,16 @@
   }
 
   .links {
+    h5 {
+      cursor: pointer;
+    }
+
+    h5:hover {
+      color: #FE6A5E;
+    }
+
     li:last-child {
-      padding-bottom: 2rem;
+      padding-bottom: 0;
       border-bottom: 1px solid @light-grey;
     }
   }
