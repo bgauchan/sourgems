@@ -1,5 +1,4 @@
 var React = require('react');
-var Collections = require('./collections.jsx');
 
 module.exports = React.createClass({
   loadCollectionsFromServer: function() {
@@ -22,19 +21,25 @@ module.exports = React.createClass({
     this.loadCollectionsFromServer();
   },
   render: function() {
-    var logoUrl = themeUrl + "/images/logo.png";
+    var bookmarkUrl = jsonUrl + "/posts?filter[tag]=bookmark";
+
+    var collections = this.state.data.map(function (collection) {
+      return (
+        <Collection data={collection} key={collection.id} />
+      );
+    });
 
     return (
       <section className="sidebar">
         <div className="logo">
-          <img src={ logoUrl } alt="logo" />
+          <img src={ themeUrl + "/images/logo.png" } alt="logo" />
         </div>
         <ul className="links">
           <li>
             <a href={ homeUrl } className="active">All Posts</a>
           </li>
           <li>
-            <a href="/">Bookmarks</a>
+            <a href={ bookmarkUrl }>Bookmarks</a>
           </li>
           <li>
             <a href="/">Images</a>
@@ -46,8 +51,25 @@ module.exports = React.createClass({
             <a href="/">Articles</a>
           </li>
         </ul>
-        <Collections data={this.state.data} />
+        <ul className="collections">
+          <li>
+            <h5>COLLECTIONS</h5>
+          </li>
+        </ul>
+        <ul>
+          { collections }
+        </ul>
       </section>
+    );
+  }
+});
+
+var Collection = React.createClass({
+  render: function() {
+    return (
+      <li>
+        <a href="" key={this.props.data.id}>{ this.props.data.name }</a>
+      </li>
     );
   }
 });

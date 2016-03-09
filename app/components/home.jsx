@@ -7,7 +7,7 @@ var Posts = require('./posts.jsx');
 var Home = React.createClass({
   loadPostsFromServer: function() {
     jQuery.ajax({
-      url: this.props.url,
+      url: this.state.jsonUrl,
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -19,7 +19,10 @@ var Home = React.createClass({
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {
+      jsonUrl: jsonUrl + "/posts?per_page=30",
+      data: []
+    };
   },
   componentDidMount: function() {
     this.loadPostsFromServer();
@@ -30,7 +33,7 @@ var Home = React.createClass({
         <Sidebar />
         <section className="content">
           <Nav />
-          <Posts data={this.state.data} />
+          <Posts data={this.state.data} jsonUrl={this.state.jsonUrl}/>
         </section>
       </div>
     );
@@ -39,8 +42,9 @@ var Home = React.createClass({
 
 module.exports = React.createClass({
   render: function () {
+    console.log("test");
     return (
-        <Home url={ jsonUrl + "/posts" } />
+        <Home />
     );
   }
 });
