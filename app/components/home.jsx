@@ -5,9 +5,10 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({
-  handleUrlChange: function(newUrl) {
+  handleUrlChange: function(newUrl, newPageTitle) {
     this.setState({      
-      jsonUrl: newUrl
+      jsonUrl: newUrl,
+      pageTitle: newPageTitle
     });
   },
   loadPostsFromServer: function() {
@@ -26,6 +27,7 @@ var Home = React.createClass({
   getInitialState: function() {
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
+      pageTitle: "All Posts",
       data: []
     };
   },
@@ -35,8 +37,8 @@ var Home = React.createClass({
       <div className="app">
         <Sidebar onUrlChange={this.handleUrlChange} />
         <section className="content">
-          <Nav />
-          <Posts data={this.state.data} jsonUrl={this.state.jsonUrl}/>
+          <Nav pageTitle={this.state.pageTitle} />
+          <Posts data={this.state.data} jsonUrl={this.state.jsonUrl} />
         </section>
       </div>
     );

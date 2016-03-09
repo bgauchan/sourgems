@@ -5,7 +5,7 @@ module.exports = React.createClass({
     return (
       <nav className="main-nav">
         <section className="container">
-          <h4>All Posts</h4>
+          <h4>{this.props.pageTitle}</h4>
         </section>
       </nav>
     );

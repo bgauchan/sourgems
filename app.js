@@ -21,8 +21,9 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   handleClick: function(event) {    
-    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id ;
-    this.props.onUrlChange(url);
+    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
+    var pageTitle = event.target.getAttribute('name');
+    this.props.onUrlChange(url, pageTitle);
   },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
@@ -52,9 +53,9 @@ module.exports = React.createClass({displayName: "exports",
           
           this.state.data.map(function (collection) {
             return (
-              React.createElement("li", {key:  collection.id}, 
-                React.createElement("span", {id:  collection.id, onClick:  this.handleClick}, 
-                   collection.name
+              React.createElement("li", {key: collection.id}, 
+                React.createElement("span", {id: collection.id, name: collection.name, onClick: this.handleClick}, 
+                  collection.name
                 )
               )
             );
@@ -73,9 +74,10 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({displayName: "Home",
-  handleUrlChange: function(newUrl) {
+  handleUrlChange: function(newUrl, newPageTitle) {
     this.setState({      
-      jsonUrl: newUrl
+      jsonUrl: newUrl,
+      pageTitle: newPageTitle
     });
   },
   loadPostsFromServer: function() {
@@ -94,6 +96,7 @@ var Home = React.createClass({displayName: "Home",
   getInitialState: function() {
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
+      pageTitle: "All Posts",
       data: []
     };
   },
@@ -103,7 +106,7 @@ var Home = React.createClass({displayName: "Home",
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
         React.createElement("section", {className: "content"}, 
-          React.createElement(Nav, null), 
+          React.createElement(Nav, {pageTitle: this.state.pageTitle}), 
           React.createElement(Posts, {data: this.state.data, jsonUrl: this.state.jsonUrl})
         )
       )
@@ -176,7 +179,7 @@ module.exports = React.createClass({displayName: "exports",
     return (
       React.createElement("nav", {className: "main-nav"}, 
         React.createElement("section", {className: "container"}, 
-          React.createElement("h4", null, "All Posts")
+          React.createElement("h4", null, this.props.pageTitle)
         )
       )
     );
@@ -237,7 +240,7 @@ var Collections = require('./collections.jsx');
 module.exports = React.createClass({displayName: "exports",
   handleClick: function(event) {    
     var url = jsonUrl + "/posts?per_page=30";
-    this.props.onUrlChange(url);
+    this.props.onUrlChange(url, "All Posts");
   },
   render: function() {
     return (

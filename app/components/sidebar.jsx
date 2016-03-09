@@ -6,7 +6,7 @@ var Collections = require('./collections.jsx');
 module.exports = React.createClass({
   handleClick: function(event) {    
     var url = jsonUrl + "/posts?per_page=30";
-    this.props.onUrlChange(url);
+    this.props.onUrlChange(url, "All Posts");
   },
   render: function() {
     return (
