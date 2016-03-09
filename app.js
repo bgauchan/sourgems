@@ -75,6 +75,11 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({displayName: "Home",
+  handleUrlChange: function(newUrl) {
+    this.setState({      
+      jsonUrl: newUrl
+    });
+  },
   loadPostsFromServer: function() {
     jQuery.ajax({
       url: this.state.jsonUrl,
@@ -95,15 +100,18 @@ var Home = React.createClass({displayName: "Home",
     };
   },
   componentDidMount: function() {
-    this.loadPostsFromServer();
   },
   render: function() {
+    this.loadPostsFromServer();
     return (
       React.createElement("div", {className: "app"}, 
-        React.createElement(Sidebar, null), 
+        React.createElement(Sidebar, {
+          jsonUrl:  this.state.jsonUrl, 
+          onUrlChange:  this.handleUrlChange}
+        ), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, null), 
-          React.createElement(Posts, {data: this.state.data, jsonUrl: this.state.jsonUrl})
+          React.createElement(Posts, {data:  this.state.data, jsonUrl:  this.state.jsonUrl})
         )
       )
     );
@@ -112,7 +120,6 @@ var Home = React.createClass({displayName: "Home",
 
 module.exports = React.createClass({displayName: "exports",
   render: function () {
-    console.log("test");
     return (
         React.createElement(Home, null)
     );
@@ -127,25 +134,41 @@ module.exports = React.createClass({displayName: "exports",
   handleClick: function(event) {
     event.preventDefault();
 
+    var url = jsonUrl + "/posts?filter[tag]=" + event.target.id ;
 
+    if(event.target.id === "all-posts") {
+      url = jsonUrl + "/posts?per_page=30"; // homepage
+    }
+
+    this.props.onUrlChange(url);
   },
   render: function() {
     return (
       React.createElement("ul", {className: "links"}, 
         React.createElement("li", null, 
-          React.createElement("a", {href:  homeUrl, className: "active"}, "All Posts")
+          React.createElement("a", {href: "", id: "all-posts", onClick: this.handleClick}, 
+            "All Posts"
+          )
         ), 
         React.createElement("li", null, 
-          React.createElement("a", {href: "", onClick: this.handleClick}, "Bookmarks")
+          React.createElement("a", {href: "", id: "bookmark", onClick: this.handleClick}, 
+            "Bookmarks"
+          )
         ), 
         React.createElement("li", null, 
-          React.createElement("a", {href: "/"}, "Images")
+          React.createElement("a", {href: "", id: "image", onClick: this.handleClick}, 
+            "Images"
+          )
         ), 
         React.createElement("li", null, 
-          React.createElement("a", {href: "/"}, "Notes")
+          React.createElement("a", {href: "", id: "note", onClick: this.handleClick}, 
+            "Notes"
+          )
         ), 
         React.createElement("li", null, 
-          React.createElement("a", {href: "/"}, "Articles")
+          React.createElement("a", {href: "", id: "article", onClick: this.handleClick}, 
+            "Articles"
+          )
         )
       )
     );
@@ -213,19 +236,22 @@ var Post = React.createClass({displayName: "Post",
 });
 
 },{"react":205}],7:[function(require,module,exports){
+
 var React = require('react');
 var Links = require('./links.jsx');
 var Collections = require('./collections.jsx');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
-    var bookmarkUrl = jsonUrl + "/posts?filter[tag]=bookmark";
     return (
       React.createElement("section", {className: "sidebar"}, 
         React.createElement("div", {className: "logo"}, 
           React.createElement("img", {src:  themeUrl + "/images/logo.png", alt: "logo"})
         ), 
-        React.createElement(Links, null), 
+        React.createElement(Links, {
+          jsonUrl:  this.props.jsonUrl, 
+          onUrlChange: this.props.onUrlChange}
+        ), 
         React.createElement(Collections, null)
       )
     );

@@ -5,6 +5,11 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({
+  handleUrlChange: function(newUrl) {
+    this.setState({      
+      jsonUrl: newUrl
+    });
+  },
   loadPostsFromServer: function() {
     jQuery.ajax({
       url: this.state.jsonUrl,
@@ -25,15 +30,18 @@ var Home = React.createClass({
     };
   },
   componentDidMount: function() {
-    this.loadPostsFromServer();
   },
   render: function() {
+    this.loadPostsFromServer();
     return (
       <div className="app">
-        <Sidebar />
+        <Sidebar 
+          jsonUrl={ this.state.jsonUrl }
+          onUrlChange={ this.handleUrlChange }
+        />
         <section className="content">
           <Nav />
-          <Posts data={this.state.data} jsonUrl={this.state.jsonUrl}/>
+          <Posts data={ this.state.data } jsonUrl={ this.state.jsonUrl }/>
         </section>
       </div>
     );
@@ -42,7 +50,6 @@ var Home = React.createClass({
 
 module.exports = React.createClass({
   render: function () {
-    console.log("test");
     return (
         <Home />
     );
