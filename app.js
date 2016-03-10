@@ -20,10 +20,7 @@ React.render((
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
-  handleClick: function(event) {    
-    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
-    var pageTitle = event.target.getAttribute('name');
-    this.props.onUrlChange(url, pageTitle);
+  handleClick: function(event) {  
   },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
@@ -39,7 +36,10 @@ module.exports = React.createClass({displayName: "exports",
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {
+      activeCollectionID: "", // keeps track of the currently selected collection
+      data: []
+    };
   },
   componentDidMount: function() {
     this.loadCollectionsFromServer();
@@ -52,9 +52,16 @@ module.exports = React.createClass({displayName: "exports",
         ), 
           
           this.state.data.map(function (collection) {
+            var activeClassName;
+
+            if(this.state.activeCollectionID == collection.id) {
+              activeClassName = "active";
+            }
+
             return (
               React.createElement("li", {key: collection.id}, 
-                React.createElement("span", {id: collection.id, name: collection.name, onClick: this.handleClick}, 
+                React.createElement("span", {className: activeClassName, id: collection.id, 
+                      name: collection.name, onClick: this.handleClick}, 
                   collection.name
                 )
               )
@@ -241,19 +248,84 @@ var Collections = require('./collections.jsx');
 
 module.exports = React.createClass({displayName: "exports",
   handleClick: function(event) {    
-    var url = jsonUrl + "/posts?per_page=30";
-    this.props.onUrlChange(url, "All Posts");
+
+    this.setState({   
+      activeCollectionID: event.target.id
+    });
+
+    var url = "";;
+
+    if(event.target.id > 0) {
+      url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
+      this.props.onUrlChange(url, event.target.getAttribute('name'));
+    } else {
+      url = jsonUrl + "/posts?per_page=30";
+      this.props.onUrlChange(url, "All Posts");
+    }
+  },
+  loadCollectionsFromServer: function() {
+    jQuery.ajax({
+      url: homeUrl + "/wp-json/wp/v2/categories",
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  getInitialState: function() {
+    return {
+      activeCollectionID: "", // keeps track of the currently selected collection
+      data: []
+    };
+  },
+  componentDidMount: function() {
+    this.loadCollectionsFromServer();
   },
   render: function() {
+    
+    var activeClassName;
+
+    if(this.state.activeCollectionID.length < 1) {
+      activeClassName = "active";
+    }
+
     return (
       React.createElement("section", {className: "sidebar"}, 
         React.createElement("div", {className: "logo"}, 
           React.createElement("img", {src:  themeUrl + "/images/logo.png", alt: "logo"})
         ), 
         React.createElement("ul", {className: "links"}, 
-          React.createElement("li", null, " ", React.createElement("h5", {onClick: this.handleClick}, "All Posts"), " ")
+          React.createElement("li", null, 
+            React.createElement("h5", {className: activeClassName, onClick: this.handleClick}, "All Posts")
+          )
         ), 
-        React.createElement(Collections, {onUrlChange: this.props.onUrlChange})
+        React.createElement("ul", {className: "collections"}, 
+          React.createElement("li", null, 
+            React.createElement("h5", {onClick: this.handleClick}, "COLLECTIONS")
+          ), 
+            
+            this.state.data.map(function (collection) {
+              activeClassName = "";
+
+              if(this.state.activeCollectionID == collection.id) {
+                activeClassName = "active";
+              }
+
+              return (
+                React.createElement("li", {key: collection.id}, 
+                  React.createElement("span", {className: activeClassName, id: collection.id, 
+                        name: collection.name, onClick: this.handleClick}, 
+                    collection.name
+                  )
+                )
+              );
+            }.bind(this))
+          
+        )
       )
     );
   }

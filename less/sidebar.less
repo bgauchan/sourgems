@@ -22,12 +22,12 @@
     img {
       height: 33px;
       width: 177px;
-      margin-left: 2rem;
+      margin-left: 1.5rem;
     }
   }
 
   ul {
-    padding: 0 2rem;
+    padding: 0 2rem 0 1.5rem;
   }
 
   li {
@@ -35,30 +35,38 @@
 
     span {
       color: @light-grey;
+      display: inline-block;
+      width: 100%;
       text-decoration: none;
       cursor: pointer;
+      padding: 0.5rem 0;
     }
 
+    span.active,
     span:hover {
-      color: #FE6A5E;
+      background: @secondary-color;
+      border-radius: 3px;
+      color: white;
+      padding: 0.5rem 1rem;
     }
-  }
-
-  a.active {
-    color: #FE6A5E;
   }
 
   .links {
     h5 {
       cursor: pointer;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0;
     }
 
+    h5.active,
     h5:hover {
-      color: #FE6A5E;
+      background: @secondary-color;
+      border-radius: 2px;
+      color: white;
+      padding: 0.5rem 1rem;
     }
 
     li:last-child {
-      padding-bottom: 0;
       border-bottom: 1px solid @light-grey;
     }
   }

@@ -2,10 +2,7 @@
 var React = require('react');
 
 module.exports = React.createClass({
-  handleClick: function(event) {    
-    var url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
-    var pageTitle = event.target.getAttribute('name');
-    this.props.onUrlChange(url, pageTitle);
+  handleClick: function(event) {  
   },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
@@ -21,7 +18,10 @@ module.exports = React.createClass({
     });
   },
   getInitialState: function() {
-    return {data: []};
+    return {
+      activeCollectionID: "", // keeps track of the currently selected collection
+      data: []
+    };
   },
   componentDidMount: function() {
     this.loadCollectionsFromServer();
@@ -34,9 +34,16 @@ module.exports = React.createClass({
         </li>
         {  
           this.state.data.map(function (collection) {
+            var activeClassName;
+
+            if(this.state.activeCollectionID == collection.id) {
+              activeClassName = "active";
+            }
+
             return (
               <li key={collection.id}>
-                <span id={collection.id} name={collection.name} onClick={this.handleClick}>
+                <span className={activeClassName} id={collection.id} 
+                      name={collection.name} onClick={this.handleClick}>
                   {collection.name}
                 </span>
               </li>
