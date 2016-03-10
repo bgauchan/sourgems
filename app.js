@@ -75,14 +75,14 @@ var Posts = require('./posts.jsx');
 
 var Home = React.createClass({displayName: "Home",
   handleUrlChange: function(newUrl, newPageTitle) {
-    this.setState({      
-      jsonUrl: newUrl,
+    this.loadPostsFromServer(newUrl);
+    this.setState({   
       pageTitle: newPageTitle
     });
   },
-  loadPostsFromServer: function() {
+  loadPostsFromServer: function(url) {
     jQuery.ajax({
-      url: this.state.jsonUrl,
+      url: url,
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -100,8 +100,10 @@ var Home = React.createClass({displayName: "Home",
       data: []
     };
   },
+  componentDidMount: function() {    
+    this.loadPostsFromServer(this.state.jsonUrl);
+  },
   render: function() {
-    this.loadPostsFromServer();
     return (
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
