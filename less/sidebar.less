@@ -52,22 +52,34 @@
   }
 
   .links {
+    border-bottom: 1px solid darken(@light-grey, 60);
+    padding-bottom: 0.8rem;
+
     h5 {
       cursor: pointer;
-      margin-bottom: 1rem;
+      display: inline-block;
+      margin-bottom: 0;
+      margin-left: 1.2rem;
       padding: 0.5rem 0;
+      vertical-align: middle;
     }
 
-    h5.active,
-    h5:hover {
+    li.active,
+    li:hover {
       background: @secondary-color;
       border-radius: 2px;
       color: white;
-      padding: 0.5rem 1rem;
+      padding: 0 1rem;
     }
 
-    li:last-child {
-      border-bottom: 1px solid @light-grey;
+    img {
+      display: inline-block;
+      vertical-align: middle;
+      width: 2rem;
     }
+  }
+
+  .collections h5 {
+    color: lighten(@primary-color, 5);
   }
 }

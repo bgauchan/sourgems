@@ -216,10 +216,29 @@ module.exports = React.createClass({displayName: "exports",
 
 var Post = React.createClass({displayName: "Post",
   handleClick: function(event) {
-    jQuery('body').css('position', 'fixed');
-    jQuery('.modal').show();
-    jQuery('.modal h4').html(this.props.data.title.rendered);
-    jQuery('.modal .content').html(this.props.data.content.rendered);
+
+    var nameOfClass = event.target.getAttribute('class');
+
+    if(nameOfClass === "overlay-icons" 
+        || nameOfClass === "fav-icon"
+        || nameOfClass === "send-icon"
+        || nameOfClass === "delete-icon") {
+      event.preventDefault();
+    } else {
+      jQuery('body').css('position', 'fixed');
+      jQuery('.modal').show();
+      jQuery('.modal h4').html(this.props.data.title.rendered);
+      jQuery('.modal .content').html(this.props.data.content.rendered);
+    }
+  },
+  favPost: function(event) {
+    console.log("favorited");
+  },
+  sendPost: function(event) {
+    console.log("sent");
+  },
+  deletePost: function(event) {
+    console.log("deleted");
   },
   render: function() {
     var content = this.props.data.content.rendered;
@@ -234,7 +253,18 @@ var Post = React.createClass({displayName: "Post",
       React.createElement("div", {"data-post-id": this.props.data.id, className: "post", 
           onClick: this.handleClick}, 
         React.createElement("h5", {dangerouslySetInnerHTML: {__html: title}}), 
-        React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}})
+        React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}}), 
+        React.createElement("div", {className: "overlay-icons", onClick: this.handleClick}, 
+          React.createElement("div", {className: "fav-icon", onClick: this.favPost}, 
+            React.createElement("img", {className: "fav-icon", onClick: this.favPost, src:  themeUrl + "/images/fav.svg", alt: "fav posts icon"})
+          ), 
+          React.createElement("div", {className: "send-icon", onClick: this.sendPost}, 
+            React.createElement("img", {className: "send-icon", onClick: this.sendPost, src:  themeUrl + "/images/send.svg", alt: "send posts icon"})
+          ), 
+          React.createElement("div", {className: "delete-icon", onClick: this.deletePost}, 
+            React.createElement("img", {className: "delete-icon", onClick: this.deletePost, src:  themeUrl + "/images/delete.svg", alt: "delete posts icon"})
+          )
+        )
       )
     );
   }
@@ -265,7 +295,7 @@ module.exports = React.createClass({displayName: "exports",
   },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
-      url: homeUrl + "/wp-json/wp/v2/categories",
+      url: homeUrl + "/wp-json/wp/v2/categories?order=desc&orderby=id",
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -299,8 +329,13 @@ module.exports = React.createClass({displayName: "exports",
           React.createElement("img", {src:  themeUrl + "/images/logo.png", alt: "logo"})
         ), 
         React.createElement("ul", {className: "links"}, 
-          React.createElement("li", null, 
-            React.createElement("h5", {className: activeClassName, onClick: this.handleClick}, "All Posts")
+          React.createElement("li", {className: activeClassName}, 
+            React.createElement("img", {src:  themeUrl + "/images/all-posts.svg", alt: "all posts icon"}), 
+            React.createElement("h5", {onClick: this.handleClick}, "All Posts")
+          ), 
+          React.createElement("li", {className: ""}, 
+            React.createElement("img", {src:  themeUrl + "/images/fav.svg", alt: "fav posts icon"}), 
+            React.createElement("h5", {className: "", onClick: this.handleClick}, "Favorites")
           )
         ), 
         React.createElement("ul", {className: "collections"}, 

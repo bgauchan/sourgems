@@ -22,7 +22,7 @@ module.exports = React.createClass({
   },
   loadCollectionsFromServer: function() {
     jQuery.ajax({
-      url: homeUrl + "/wp-json/wp/v2/categories",
+      url: homeUrl + "/wp-json/wp/v2/categories?order=desc&orderby=id",
       dataType: 'json',
       cache: false,
       success: function(data) {
@@ -56,8 +56,13 @@ module.exports = React.createClass({
           <img src={ themeUrl + "/images/logo.png" } alt="logo" />
         </div>
         <ul className="links">
-          <li> 
-            <h5 className={activeClassName} onClick={this.handleClick}>All Posts</h5> 
+          <li className={activeClassName}>
+            <img src={ themeUrl + "/images/all-posts.svg" } alt="all posts icon" />             
+            <h5 onClick={this.handleClick}>All Posts</h5> 
+          </li>
+          <li className="">
+            <img src={ themeUrl + "/images/fav.svg" } alt="fav posts icon" />             
+            <h5 className="" onClick={this.handleClick}>Favorites</h5> 
           </li>
         </ul>
         <ul className="collections">
