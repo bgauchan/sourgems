@@ -34,7 +34,22 @@ var Post = React.createClass({
     }
   },
   favPost: function(event) {
-    console.log("favorited");
+    var postID = jQuery(event.target).data('postid');
+    console.log("favorited by " + postID);
+
+    jQuery.ajax({
+      url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
+      dataType: 'json',
+      type: 'POST',
+      cache: false,
+      success: function(data) {
+        // this.setState({data: data});
+        console.log("something worked");
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
   },
   sendPost: function(event) {
     console.log("sent");
@@ -57,14 +72,17 @@ var Post = React.createClass({
         <h5 dangerouslySetInnerHTML={{__html: title}} />
         <div className="" dangerouslySetInnerHTML={{__html: content}} />
         <div className="overlay-icons" onClick={this.handleClick}>
-          <div className="fav-icon" onClick={this.favPost}>
-            <img className="fav-icon" onClick={this.favPost} src={ themeUrl + "/images/fav.svg" } alt="fav posts icon" />
+          <div data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost}>
+            <img data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost} src={ themeUrl + "/images/fav.svg" } 
+              alt="fav posts icon" />
           </div>
           <div className="send-icon" onClick={this.sendPost}>
-            <img className="send-icon" onClick={this.sendPost} src={ themeUrl + "/images/send.svg" } alt="send posts icon" />
+            <img className="send-icon" onClick={this.sendPost} src={ themeUrl + "/images/send.svg" } 
+              alt="send posts icon" />
           </div>
           <div className="delete-icon" onClick={this.deletePost}>
-            <img className="delete-icon" onClick={this.deletePost} src={ themeUrl + "/images/delete.svg" } alt="delete posts icon" />
+            <img className="delete-icon" onClick={this.deletePost} src={ themeUrl + "/images/delete.svg" } 
+              alt="delete posts icon" />
           </div>
         </div>
       </div>
