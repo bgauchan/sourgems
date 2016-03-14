@@ -56,9 +56,9 @@ module.exports = React.createClass({
           <img src={ themeUrl + "/images/logo.png" } alt="logo" />
         </div>
         <ul className="links">
-          <li className={activeClassName}>
+          <li className={activeClassName} onClick={this.handleClick}>
             <img src={ themeUrl + "/images/all-posts.svg" } alt="all posts icon" />             
-            <h5 onClick={this.handleClick}>All Posts</h5> 
+            <h5>All Posts</h5> 
           </li>
           <li className="">
             <img src={ themeUrl + "/images/fav.svg" } alt="fav posts icon" />             

@@ -188,7 +188,20 @@ module.exports = React.createClass({displayName: "exports",
     return (
       React.createElement("nav", {className: "main-nav"}, 
         React.createElement("section", {className: "container"}, 
-          React.createElement("h4", null, this.props.pageTitle)
+        	React.createElement("div", {className: "search-bar"}, 
+        		React.createElement("img", {className: "search-icon", src:  themeUrl + "/images/search.svg", alt: "search icon"}), 
+        		React.createElement("input", {type: "text", placeholder: "Search"})
+        	), 
+        	React.createElement("h4", null, this.props.pageTitle), 
+        	React.createElement("div", {className: "filter-by"}, 
+	      		React.createElement("ul", null, 
+	          		React.createElement("li", null, "Everything"), 
+	          		React.createElement("li", {className: "hidden-nav"}, "Bookmarks"), 
+	          		React.createElement("li", {className: "hidden-nav"}, "Images"), 
+	          		React.createElement("li", {className: "hidden-nav"}, "Notes"), 
+	          		React.createElement("li", {className: "hidden-nav"}, "Articles")
+				)
+			)
         )
       )
     );
@@ -329,9 +342,9 @@ module.exports = React.createClass({displayName: "exports",
           React.createElement("img", {src:  themeUrl + "/images/logo.png", alt: "logo"})
         ), 
         React.createElement("ul", {className: "links"}, 
-          React.createElement("li", {className: activeClassName}, 
+          React.createElement("li", {className: activeClassName, onClick: this.handleClick}, 
             React.createElement("img", {src:  themeUrl + "/images/all-posts.svg", alt: "all posts icon"}), 
-            React.createElement("h5", {onClick: this.handleClick}, "All Posts")
+            React.createElement("h5", null, "All Posts")
           ), 
           React.createElement("li", {className: ""}, 
             React.createElement("img", {src:  themeUrl + "/images/fav.svg", alt: "fav posts icon"}), 
