@@ -2,9 +2,11 @@ var React = require('react');
 
 module.exports = React.createClass({
   render: function() {
+    var favPosts = this.props.favPosts;
+
     var posts = this.props.data.map(function (post) {
       return (
-        <Post data={post} key={post.id} />
+        <Post data={post} key={post.id} favPosts={favPosts}/>
       );
     });
 
@@ -61,9 +63,17 @@ var Post = React.createClass({
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
 
+    var favClassName = "fav-icon"; // to highlight whether a post is favorited or not
+    var favImgUrl = themeUrl + "/images/fav.svg";
+
     // use the post excerpt if the content is too long
     if (content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
+    }
+
+    if(this.props.favPosts.indexOf(this.props.data.id) > -1) {
+      favClassName = "fav-icon active";
+      favImgUrl = themeUrl + "/images/fav-active.svg";
     }
 
     return (
@@ -72,8 +82,9 @@ var Post = React.createClass({
         <h5 dangerouslySetInnerHTML={{__html: title}} />
         <div className="" dangerouslySetInnerHTML={{__html: content}} />
         <div className="overlay-icons" onClick={this.handleClick}>
-          <div data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost}>
-            <img data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost} src={ themeUrl + "/images/fav.svg" } 
+          <div data-postid={this.props.data.id} className={favClassName} onClick={this.favPost}>
+            <img data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost} 
+              src={ favImgUrl } 
               alt="fav posts icon" />
           </div>
           <div className="send-icon" onClick={this.sendPost}>

@@ -13,6 +13,7 @@ module.exports = React.createClass({
         	<div className="filter-by">
 	      		<ul>
 	          		<li>Everything</li>
+                <li className="hidden-nav">Favorites</li>
 	          		<li className="hidden-nav">Bookmarks</li>
 	          		<li className="hidden-nav">Images</li>
 	          		<li className="hidden-nav">Notes</li>

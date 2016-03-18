@@ -87,6 +87,26 @@ var Home = React.createClass({displayName: "Home",
       pageTitle: newPageTitle
     });
   },
+  loadFavPostsFromServer: function() {
+    jQuery.ajax({
+      url: jsonUrl + "/posts?filter[tag]=favorite",
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+
+        var favPosts = [];
+
+        for(var i = 0; i < data.length; i++) {
+          favPosts.push(data[i].id);
+        }
+
+        this.setState({favPosts: favPosts});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
   loadPostsFromServer: function(url) {
     jQuery.ajax({
       url: url,
@@ -94,6 +114,9 @@ var Home = React.createClass({displayName: "Home",
       cache: false,
       success: function(data) {
         this.setState({data: data});
+
+        // load fav posts after everything is loaded
+        this.loadFavPostsFromServer(); 
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -104,6 +127,7 @@ var Home = React.createClass({displayName: "Home",
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
       pageTitle: "All Posts",
+      favPosts: [],
       data: []
     };
   },
@@ -116,7 +140,10 @@ var Home = React.createClass({displayName: "Home",
         React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, {pageTitle: this.state.pageTitle}), 
-          React.createElement(Posts, {data: this.state.data, jsonUrl: this.state.jsonUrl})
+          React.createElement(Posts, {
+            data: this.state.data, 
+            favPosts: this.state.favPosts, 
+            jsonUrl: this.state.jsonUrl})
         )
       )
     );
@@ -196,6 +223,7 @@ module.exports = React.createClass({displayName: "exports",
         	React.createElement("div", {className: "filter-by"}, 
 	      		React.createElement("ul", null, 
 	          		React.createElement("li", null, "Everything"), 
+                React.createElement("li", {className: "hidden-nav"}, "Favorites"), 
 	          		React.createElement("li", {className: "hidden-nav"}, "Bookmarks"), 
 	          		React.createElement("li", {className: "hidden-nav"}, "Images"), 
 	          		React.createElement("li", {className: "hidden-nav"}, "Notes"), 
@@ -213,9 +241,11 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
+    var favPosts = this.props.favPosts;
+
     var posts = this.props.data.map(function (post) {
       return (
-        React.createElement(Post, {data: post, key: post.id})
+        React.createElement(Post, {data: post, key: post.id, favPosts: favPosts})
       );
     });
 
@@ -272,9 +302,17 @@ var Post = React.createClass({displayName: "Post",
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
 
+    var favClassName = "fav-icon"; // to highlight whether a post is favorited or not
+    var favImgUrl = themeUrl + "/images/fav.svg";
+
     // use the post excerpt if the content is too long
     if (content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
+    }
+
+    if(this.props.favPosts.indexOf(this.props.data.id) > -1) {
+      favClassName = "fav-icon active";
+      favImgUrl = themeUrl + "/images/fav-active.svg";
     }
 
     return (
@@ -283,8 +321,9 @@ var Post = React.createClass({displayName: "Post",
         React.createElement("h5", {dangerouslySetInnerHTML: {__html: title}}), 
         React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}}), 
         React.createElement("div", {className: "overlay-icons", onClick: this.handleClick}, 
-          React.createElement("div", {"data-postid": this.props.data.id, className: "fav-icon", onClick: this.favPost}, 
-            React.createElement("img", {"data-postid": this.props.data.id, className: "fav-icon", onClick: this.favPost, src:  themeUrl + "/images/fav.svg", 
+          React.createElement("div", {"data-postid": this.props.data.id, className: favClassName, onClick: this.favPost}, 
+            React.createElement("img", {"data-postid": this.props.data.id, className: "fav-icon", onClick: this.favPost, 
+              src:  favImgUrl, 
               alt: "fav posts icon"})
           ), 
           React.createElement("div", {className: "send-icon", onClick: this.sendPost}, 
@@ -323,8 +362,8 @@ module.exports = React.createClass({displayName: "exports",
       this.props.onUrlChange(url, event.target.getAttribute('name'));
     } else {
       if(newLinkName === "fav-posts") {
-        url = jsonUrl + "/posts?filter[tag]=fav";
-        this.props.onUrlChange(url, "Favorite Posts");
+        url = jsonUrl + "/posts?filter[tag]=favorite";
+        this.props.onUrlChange(url, "Favorites");
       } else {
         url = jsonUrl + "/posts?per_page=30";
         this.props.onUrlChange(url, "All Posts");
@@ -373,12 +412,6 @@ module.exports = React.createClass({displayName: "exports",
             onClick: this.handleClick}, 
             React.createElement("img", {"data-link-name": "", src:  themeUrl + "/images/all-posts.svg", alt: "all posts icon"}), 
             React.createElement("h5", {"data-link-name": ""}, "All Posts")
-          ), 
-          React.createElement("li", {"data-link-name": "fav-posts", 
-            className: this.state.linkName === "fav-posts" && "active", 
-            onClick: this.handleClick}, 
-            React.createElement("img", {"data-link-name": "fav-posts", src:  themeUrl + "/images/fav.svg", alt: "fav posts icon"}), 
-            React.createElement("h5", {"data-link-name": "fav-posts", className: "", onClick: this.handleClick}, "Favorites")
           )
         ), 
         React.createElement("ul", {className: "collections"}, 

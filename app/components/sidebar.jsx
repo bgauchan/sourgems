@@ -19,8 +19,8 @@ module.exports = React.createClass({
       this.props.onUrlChange(url, event.target.getAttribute('name'));
     } else {
       if(newLinkName === "fav-posts") {
-        url = jsonUrl + "/posts?filter[tag]=fav";
-        this.props.onUrlChange(url, "Favorite Posts");
+        url = jsonUrl + "/posts?filter[tag]=favorite";
+        this.props.onUrlChange(url, "Favorites");
       } else {
         url = jsonUrl + "/posts?per_page=30";
         this.props.onUrlChange(url, "All Posts");
@@ -69,12 +69,6 @@ module.exports = React.createClass({
             onClick={this.handleClick}>
             <img data-link-name="" src={ themeUrl + "/images/all-posts.svg" } alt="all posts icon" />             
             <h5 data-link-name="">All Posts</h5> 
-          </li>
-          <li data-link-name="fav-posts"             
-            className={this.state.linkName === "fav-posts" && "active"} 
-            onClick={this.handleClick}>
-            <img data-link-name="fav-posts" src={ themeUrl + "/images/fav.svg" } alt="fav posts icon" />             
-            <h5 data-link-name="fav-posts" className="" onClick={this.handleClick}>Favorites</h5> 
           </li>
         </ul>
         <ul className="collections">
