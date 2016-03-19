@@ -139,7 +139,10 @@ var Home = React.createClass({displayName: "Home",
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
         React.createElement("section", {className: "content"}, 
-          React.createElement(Nav, {pageTitle: this.state.pageTitle}), 
+          React.createElement(Nav, {
+            pageTitle: this.state.pageTitle, 
+            jsonUrl: this.state.jsonUrl, 
+            onUrlChange: this.handleUrlChange}), 
           React.createElement(Posts, {
             data: this.state.data, 
             favPosts: this.state.favPosts, 
@@ -211,13 +214,25 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+  searchPosts: function(event) {
+    if(event && event.keyCode == 13) // 13 == return/enter
+    {
+      var url = this.props.jsonUrl + "&search=" + event.target.value;
+      this.props.onUrlChange(url, "Search Results");
+    } 
+    else if(event.target.value === "" && event.keyCode == 8) {  // 8 == delete/backspace
+      url = this.props.jsonUrl;
+      this.props.onUrlChange(url, "All Posts");
+    }
+  },
   render: function() {
     return (
       React.createElement("nav", {className: "main-nav"}, 
         React.createElement("section", {className: "container"}, 
         	React.createElement("div", {className: "search-bar"}, 
         		React.createElement("img", {className: "search-icon", src:  themeUrl + "/images/search.svg", alt: "search icon"}), 
-        		React.createElement("input", {type: "text", placeholder: "Search"})
+        		React.createElement("input", {id: "search-box", type: "text", placeholder: "Search", 
+              onKeyUp: this.searchPosts})
         	), 
         	React.createElement("h4", null, this.props.pageTitle), 
         	React.createElement("div", {className: "filter-by"}, 
@@ -276,13 +291,15 @@ var Post = React.createClass({displayName: "Post",
   },
   favPost: function(event) {
     var postID = jQuery(event.target).data('postid');
-    console.log("favorited by " + postID);
 
     jQuery.ajax({
       url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
       dataType: 'json',
       type: 'POST',
       cache: false,
+      data: {
+        "title": "Updated!"
+      },
       success: function(data) {
         // this.setState({data: data});
         console.log("something worked");

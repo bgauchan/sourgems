@@ -37,13 +37,15 @@ var Post = React.createClass({
   },
   favPost: function(event) {
     var postID = jQuery(event.target).data('postid');
-    console.log("favorited by " + postID);
 
     jQuery.ajax({
       url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
       dataType: 'json',
       type: 'POST',
       cache: false,
+      data: {
+        "title": "Updated!"
+      },
       success: function(data) {
         // this.setState({data: data});
         console.log("something worked");

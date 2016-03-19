@@ -63,7 +63,10 @@ var Home = React.createClass({
       <div className="app">
         <Sidebar onUrlChange={this.handleUrlChange} />
         <section className="content">
-          <Nav pageTitle={this.state.pageTitle} />
+          <Nav 
+            pageTitle={this.state.pageTitle} 
+            jsonUrl={this.state.jsonUrl} 
+            onUrlChange={this.handleUrlChange} />
           <Posts 
             data={this.state.data} 
             favPosts={this.state.favPosts}
