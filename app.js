@@ -293,20 +293,20 @@ var Post = React.createClass({displayName: "Post",
     var postID = jQuery(event.target).data('postid');
 
     jQuery.ajax({
+      method: "POST",
       url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
-      dataType: 'json',
-      type: 'POST',
-      cache: false,
       data: {
         "title": "Updated!"
       },
-      success: function(data) {
-        // this.setState({data: data});
-        console.log("something worked");
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
+      beforeSend: function ( xhr ) {
+        xhr.setRequestHeader( 'X-WP-Nonce', AUTH.nonce );
+      },
+      success : function( response ) {
+        console.log( response );
+      },
+      fail : function( response ) {
+        console.log( response );
+      }
     });
   },
   sendPost: function(event) {

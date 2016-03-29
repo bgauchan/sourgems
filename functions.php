@@ -40,6 +40,14 @@ function sourgems_scripts() {
 
 	wp_register_script( 'sourgems-script', get_template_directory_uri() . '/app.js', array(), '20150910', true );
 	wp_enqueue_script( 'sourgems-script' );
+
+  //localize data for script
+  wp_localize_script( 'sourgems-script', 'AUTH', array(
+      'root' => esc_url_raw( rest_url() ),
+      'nonce' => wp_create_nonce( 'wp_rest' ),
+      'current_user_id' => get_current_user_id()
+    )
+  );
 }
 add_action( 'wp_enqueue_scripts', 'sourgems_scripts' );
 
