@@ -71,8 +71,19 @@ var Post = React.createClass({
     // use the post excerpt if the content is too long
     if (content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
+    } 
+
+    // checks to see if there's only one link (and then if its a pdf link)
+    if((content.match(/<a href=/g) || []).length == 1) {
+      if(content.indexOf(".pdf") > -1) {
+        content = "<div class='pdf icon-holder'>" + 
+                    "<img class='pdf-icon' src='" + themeUrl + "/images/pdf-2.svg' alt='pdf icon' />" +                     
+                  "</div>" + content;
+      }
     }
 
+
+    // check to see if this post is also in the fav posts list
     if(this.props.favPosts.indexOf(this.props.data.id) > -1) {
       favClassName = "fav-icon active";
       favImgUrl = themeUrl + "/images/fav-active.svg";

@@ -83,6 +83,8 @@ module.exports = React.createClass({
                 activeLink = "active";
               }
 
+              var text = collection.name + "(" + collection.count + ")";
+
               return (
                 <li data-link-name={collection.name} key={collection.id}>
                   <span data-link-name={collection.name} 
@@ -91,6 +93,7 @@ module.exports = React.createClass({
                         name={collection.name} 
                         onClick={this.handleClick}>
                     {collection.name}
+                    <label>( {collection.count} )</label>
                   </span>
                 </li>
               );

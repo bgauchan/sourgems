@@ -33,7 +33,7 @@
   li {
     list-style-type: none;
 
-    span {
+    & > span {
       color: @light-grey;
       display: inline-block;
       width: 100%;
@@ -42,12 +42,20 @@
       padding: 0.5rem 0;
     }
 
-    span.active,
-    span:hover {
+    & > span.active,
+    & > span:hover {
       background: @secondary-color;
       border-radius: 3px;
       color: white;
       padding: 0.5rem 1rem;
+    }
+
+    label {
+      display: inline-block;
+      font-size: 1.3rem;
+      margin-left: 0.5rem;
+      font-weight: normal;
+      color: gray;
     }
   }
 
