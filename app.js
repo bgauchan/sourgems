@@ -349,19 +349,9 @@ var Post = React.createClass({displayName: "Post",
         React.createElement("h5", {dangerouslySetInnerHTML: {__html: title}}), 
         React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}}), 
         React.createElement("div", {className: "overlay-icons", onClick: this.handleClick}, 
-          React.createElement("div", {"data-postid": this.props.data.id, className: favClassName, onClick: this.favPost}, 
-            React.createElement("img", {"data-postid": this.props.data.id, className: "fav-icon", onClick: this.favPost, 
-              src:  favImgUrl, 
-              alt: "fav posts icon"})
-          ), 
-          React.createElement("div", {className: "send-icon", onClick: this.sendPost}, 
-            React.createElement("img", {className: "send-icon", onClick: this.sendPost, src:  themeUrl + "/images/send.svg", 
-              alt: "send posts icon"})
-          ), 
-          React.createElement("div", {className: "delete-icon", onClick: this.deletePost}, 
-            React.createElement("img", {className: "delete-icon", onClick: this.deletePost, src:  themeUrl + "/images/delete.svg", 
-              alt: "delete posts icon"})
-          )
+          React.createElement("div", {"data-postid": this.props.data.id, className: favClassName, onClick: this.favPost}), 
+          React.createElement("div", {className: "send-icon", onClick: this.sendPost}), 
+          React.createElement("div", {className: "delete-icon", onClick: this.deletePost})
         )
       )
     );

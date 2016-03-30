@@ -95,19 +95,9 @@ var Post = React.createClass({
         <h5 dangerouslySetInnerHTML={{__html: title}} />
         <div className="" dangerouslySetInnerHTML={{__html: content}} />
         <div className="overlay-icons" onClick={this.handleClick}>
-          <div data-postid={this.props.data.id} className={favClassName} onClick={this.favPost}>
-            <img data-postid={this.props.data.id} className="fav-icon" onClick={this.favPost} 
-              src={ favImgUrl } 
-              alt="fav posts icon" />
-          </div>
-          <div className="send-icon" onClick={this.sendPost}>
-            <img className="send-icon" onClick={this.sendPost} src={ themeUrl + "/images/send.svg" } 
-              alt="send posts icon" />
-          </div>
-          <div className="delete-icon" onClick={this.deletePost}>
-            <img className="delete-icon" onClick={this.deletePost} src={ themeUrl + "/images/delete.svg" } 
-              alt="delete posts icon" />
-          </div>
+          <div data-postid={this.props.data.id} className={favClassName} onClick={this.favPost}></div>
+          <div className="send-icon" onClick={this.sendPost}></div>
+          <div className="delete-icon" onClick={this.deletePost}></div>
         </div>
       </div>
     );
