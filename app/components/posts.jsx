@@ -3,7 +3,6 @@ var React = require('react');
 module.exports = React.createClass({
   render: function() {
     var posts = this.props.data.map(function (post) {
-      console.log(post);
       return (
         <Post data={post} key={post.id} />
       );
@@ -18,15 +17,15 @@ module.exports = React.createClass({
 });
 
 var Post = React.createClass({
-  contextTypes: {
-    favPosts: React.PropTypes.array
-  },
   getInitialState: function() {
     var fav = false;
 
-    // check to see if this post is also in the fav posts list
-    if(this.context.favPosts.indexOf(this.props.data.id) > -1) {
-      fav = true;
+    var tags = this.props.data.tags;
+
+    for(var i = 0; i < tags.length; i++) {
+      if(tags[i]["name"] === "favorite") {
+        fav = true;
+      }      
     }
 
     return {

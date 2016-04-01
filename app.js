@@ -85,43 +85,13 @@ var Home = React.createClass({displayName: "Home",
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
       pageTitle: "All Posts",
-      favPosts: [],
       data: []
     };
   },
-  childContextTypes: {
-    favPosts: React.PropTypes.array
-  },
-  getChildContext: function() {
-    return {favPosts: this.state.favPosts};
-  },
   handleUrlChange: function(newUrl, newPageTitle) {
-    this.loadFavPostsFromServer(newUrl);
+    this.loadPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
-    });
-  },
-  loadFavPostsFromServer: function(newUrl) {
-    jQuery.ajax({
-      url: jsonUrl + "/posts?filter[tag]=favorite",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-
-        var favPosts = [];
-
-        for(var i = 0; i < data.length; i++) {
-          favPosts.push(data[i].id);
-        }
-
-        this.setState({favPosts: favPosts});
-
-        // load fav posts after everything is loaded
-        this.loadPostsFromServer(newUrl); 
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
     });
   },
   loadPostsFromServer: function(url) {
@@ -138,7 +108,7 @@ var Home = React.createClass({displayName: "Home",
     });
   },
   componentDidMount: function() {    
-    this.loadFavPostsFromServer(this.state.jsonUrl);
+    this.loadPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
     return (
@@ -262,7 +232,6 @@ var React = require('react');
 module.exports = React.createClass({displayName: "exports",
   render: function() {
     var posts = this.props.data.map(function (post) {
-      console.log(post);
       return (
         React.createElement(Post, {data: post, key: post.id})
       );
@@ -277,15 +246,15 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 var Post = React.createClass({displayName: "Post",
-  contextTypes: {
-    favPosts: React.PropTypes.array
-  },
   getInitialState: function() {
     var fav = false;
 
-    // check to see if this post is also in the fav posts list
-    if(this.context.favPosts.indexOf(this.props.data.id) > -1) {
-      fav = true;
+    var tags = this.props.data.tags;
+
+    for(var i = 0; i < tags.length; i++) {
+      if(tags[i]["name"] === "favorite") {
+        fav = true;
+      }      
     }
 
     return {

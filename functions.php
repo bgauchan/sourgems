@@ -103,28 +103,4 @@ function my_rest_prepare_post( $data, $post, $request ) {
 }
 add_filter( 'rest_prepare_post', 'my_rest_prepare_post', 10, 3 );
 
-function my_rest_prepare_term( $data, $item, $request ) {
-  $args = array(
-    'tax_query' => array(
-      array(
-        'taxonomy' => $item->taxonomy,
-        'field' => 'slug',
-        'terms' => $item->slug
-      )
-    ),
-    'posts_per_page' => 5
-  );
-  $posts = get_posts( $args );
-  $posts_arr = array();
-  foreach ( $posts as $p ) {
-    $posts_arr[] = array(
-      'ID' => $p->ID,
-      'title' => $p->post_title
-    );
-  }
-  $data->data['posts'] = $posts_arr;
-  return $data;
-}
-add_filter( 'rest_prepare_category', 'my_rest_prepare_term', 10, 3 );
-
 ?>

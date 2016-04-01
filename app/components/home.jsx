@@ -9,43 +9,13 @@ var Home = React.createClass({
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
       pageTitle: "All Posts",
-      favPosts: [],
       data: []
     };
   },
-  childContextTypes: {
-    favPosts: React.PropTypes.array
-  },
-  getChildContext: function() {
-    return {favPosts: this.state.favPosts};
-  },
   handleUrlChange: function(newUrl, newPageTitle) {
-    this.loadFavPostsFromServer(newUrl);
+    this.loadPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
-    });
-  },
-  loadFavPostsFromServer: function(newUrl) {
-    jQuery.ajax({
-      url: jsonUrl + "/posts?filter[tag]=favorite",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-
-        var favPosts = [];
-
-        for(var i = 0; i < data.length; i++) {
-          favPosts.push(data[i].id);
-        }
-
-        this.setState({favPosts: favPosts});
-
-        // load fav posts after everything is loaded
-        this.loadPostsFromServer(newUrl); 
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
     });
   },
   loadPostsFromServer: function(url) {
@@ -62,7 +32,7 @@ var Home = React.createClass({
     });
   },
   componentDidMount: function() {    
-    this.loadFavPostsFromServer(this.state.jsonUrl);
+    this.loadPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
     return (
