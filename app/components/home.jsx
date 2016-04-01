@@ -5,13 +5,27 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({
+  getInitialState: function() {
+    return {
+      jsonUrl: jsonUrl + "/posts?per_page=30",
+      pageTitle: "All Posts",
+      favPosts: [],
+      data: []
+    };
+  },
+  childContextTypes: {
+    favPosts: React.PropTypes.array
+  },
+  getChildContext: function() {
+    return {favPosts: this.state.favPosts};
+  },
   handleUrlChange: function(newUrl, newPageTitle) {
-    this.loadPostsFromServer(newUrl);
+    this.loadFavPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
     });
   },
-  loadFavPostsFromServer: function() {
+  loadFavPostsFromServer: function(newUrl) {
     jQuery.ajax({
       url: jsonUrl + "/posts?filter[tag]=favorite",
       dataType: 'json',
@@ -25,6 +39,9 @@ var Home = React.createClass({
         }
 
         this.setState({favPosts: favPosts});
+
+        // load fav posts after everything is loaded
+        this.loadPostsFromServer(newUrl); 
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -38,25 +55,14 @@ var Home = React.createClass({
       cache: false,
       success: function(data) {
         this.setState({data: data});
-
-        // load fav posts after everything is loaded
-        this.loadFavPostsFromServer(); 
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
-  getInitialState: function() {
-    return {
-      jsonUrl: jsonUrl + "/posts?per_page=30",
-      pageTitle: "All Posts",
-      favPosts: [],
-      data: []
-    };
-  },
   componentDidMount: function() {    
-    this.loadPostsFromServer(this.state.jsonUrl);
+    this.loadFavPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
     return (
@@ -69,7 +75,6 @@ var Home = React.createClass({
             onUrlChange={this.handleUrlChange} />
           <Posts 
             data={this.state.data} 
-            favPosts={this.state.favPosts}
             jsonUrl={this.state.jsonUrl} />
         </section>
       </div>

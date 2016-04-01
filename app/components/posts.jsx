@@ -2,11 +2,10 @@ var React = require('react');
 
 module.exports = React.createClass({
   render: function() {
-    var favPosts = this.props.favPosts;
-
     var posts = this.props.data.map(function (post) {
+      console.log(post);
       return (
-        <Post data={post} key={post.id} favPosts={favPosts}/>
+        <Post data={post} key={post.id} />
       );
     });
 
@@ -19,6 +18,21 @@ module.exports = React.createClass({
 });
 
 var Post = React.createClass({
+  contextTypes: {
+    favPosts: React.PropTypes.array
+  },
+  getInitialState: function() {
+    var fav = false;
+
+    // check to see if this post is also in the fav posts list
+    if(this.context.favPosts.indexOf(this.props.data.id) > -1) {
+      fav = true;
+    }
+
+    return {
+      isPostFav: fav
+    };
+  },
   handleClick: function(event) {
 
     var nameOfClass = event.target.getAttribute('class');
@@ -37,12 +51,18 @@ var Post = React.createClass({
   },
   favPost: function(event) {
     var postID = jQuery(event.target).data('postid');
+    var tags = [-1];
+
+    if(!this.state.isPostFav) {
+      console.log("not fav");
+      tags = [14];
+    }
 
     jQuery.ajax({
       method: "POST",
       url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
       data: {
-        "title": "Updated!"
+        "tags": "tags"
       },
       beforeSend: function ( xhr ) {
         xhr.setRequestHeader( 'X-WP-Nonce', AUTH.nonce );
@@ -82,9 +102,7 @@ var Post = React.createClass({
       }
     }
 
-
-    // check to see if this post is also in the fav posts list
-    if(this.props.favPosts.indexOf(this.props.data.id) > -1) {
+    if(this.state.isPostFav) {
       favClassName = "fav-icon active";
       favImgUrl = themeUrl + "/images/fav-active.svg";
     }

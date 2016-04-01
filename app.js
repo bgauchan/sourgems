@@ -81,13 +81,27 @@ var Nav = require('./nav.jsx');
 var Posts = require('./posts.jsx');
 
 var Home = React.createClass({displayName: "Home",
+  getInitialState: function() {
+    return {
+      jsonUrl: jsonUrl + "/posts?per_page=30",
+      pageTitle: "All Posts",
+      favPosts: [],
+      data: []
+    };
+  },
+  childContextTypes: {
+    favPosts: React.PropTypes.array
+  },
+  getChildContext: function() {
+    return {favPosts: this.state.favPosts};
+  },
   handleUrlChange: function(newUrl, newPageTitle) {
-    this.loadPostsFromServer(newUrl);
+    this.loadFavPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
     });
   },
-  loadFavPostsFromServer: function() {
+  loadFavPostsFromServer: function(newUrl) {
     jQuery.ajax({
       url: jsonUrl + "/posts?filter[tag]=favorite",
       dataType: 'json',
@@ -101,6 +115,9 @@ var Home = React.createClass({displayName: "Home",
         }
 
         this.setState({favPosts: favPosts});
+
+        // load fav posts after everything is loaded
+        this.loadPostsFromServer(newUrl); 
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -114,25 +131,14 @@ var Home = React.createClass({displayName: "Home",
       cache: false,
       success: function(data) {
         this.setState({data: data});
-
-        // load fav posts after everything is loaded
-        this.loadFavPostsFromServer(); 
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
-  getInitialState: function() {
-    return {
-      jsonUrl: jsonUrl + "/posts?per_page=30",
-      pageTitle: "All Posts",
-      favPosts: [],
-      data: []
-    };
-  },
   componentDidMount: function() {    
-    this.loadPostsFromServer(this.state.jsonUrl);
+    this.loadFavPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
     return (
@@ -145,7 +151,6 @@ var Home = React.createClass({displayName: "Home",
             onUrlChange: this.handleUrlChange}), 
           React.createElement(Posts, {
             data: this.state.data, 
-            favPosts: this.state.favPosts, 
             jsonUrl: this.state.jsonUrl})
         )
       )
@@ -256,11 +261,10 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
-    var favPosts = this.props.favPosts;
-
     var posts = this.props.data.map(function (post) {
+      console.log(post);
       return (
-        React.createElement(Post, {data: post, key: post.id, favPosts: favPosts})
+        React.createElement(Post, {data: post, key: post.id})
       );
     });
 
@@ -273,6 +277,21 @@ module.exports = React.createClass({displayName: "exports",
 });
 
 var Post = React.createClass({displayName: "Post",
+  contextTypes: {
+    favPosts: React.PropTypes.array
+  },
+  getInitialState: function() {
+    var fav = false;
+
+    // check to see if this post is also in the fav posts list
+    if(this.context.favPosts.indexOf(this.props.data.id) > -1) {
+      fav = true;
+    }
+
+    return {
+      isPostFav: fav
+    };
+  },
   handleClick: function(event) {
 
     var nameOfClass = event.target.getAttribute('class');
@@ -291,12 +310,18 @@ var Post = React.createClass({displayName: "Post",
   },
   favPost: function(event) {
     var postID = jQuery(event.target).data('postid');
+    var tags = [-1];
+
+    if(!this.state.isPostFav) {
+      console.log("not fav");
+      tags = [14];
+    }
 
     jQuery.ajax({
       method: "POST",
       url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
       data: {
-        "title": "Updated!"
+        "tags": "tags"
       },
       beforeSend: function ( xhr ) {
         xhr.setRequestHeader( 'X-WP-Nonce', AUTH.nonce );
@@ -336,9 +361,7 @@ var Post = React.createClass({displayName: "Post",
       }
     }
 
-
-    // check to see if this post is also in the fav posts list
-    if(this.props.favPosts.indexOf(this.props.data.id) > -1) {
+    if(this.state.isPostFav) {
       favClassName = "fav-icon active";
       favImgUrl = themeUrl + "/images/fav-active.svg";
     }

@@ -51,4 +51,80 @@ function sourgems_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'sourgems_scripts' );
 
+function my_rest_prepare_post( $data, $post, $request ) {
+
+  $_data = $data->data;
+
+  $thumbnail_id = get_post_thumbnail_id( $post->ID );
+  $thumbnail = wp_get_attachment_image_src( $thumbnail_id );
+  $_data['featured_image_thumbnail_url'] = $thumbnail[0];
+
+  unset( $_data['author'] );
+  unset( $_data['comment_status'] );
+  unset( $_data['ping_status'] );
+  unset( $_data['modified'] );
+  unset( $_data['modified_gmt'] );
+  unset( $_data['date_gmt'] );
+  unset( $_data['guid'] );
+  unset( $_data['slug'] );
+  unset( $_data['sticky'] );
+
+  $tags_arr = array();
+
+  foreach ( $_data['tags'] as $tagID ) {
+
+    $tag = get_tag($tagID);
+
+    // add name field to the array
+    $tags_arr[] = array(
+      'ID' => $tagID,
+      'name' => $tag->name
+    );
+  }
+
+  $_data['tags'] = $tags_arr; // assign the new tags array to the JSON field
+
+  $categories_arr = array();
+
+  foreach ( $_data['categories'] as $catID ) {
+
+    // add name field to the array
+    $categories_arr[] = array(
+      'ID' => $catID,
+      'name' => get_cat_name($catID)
+    );
+  }
+
+  $_data['categories'] = $categories_arr; // assign the new tags array to the JSON field
+
+  $data->data = $_data;
+
+  return $data;
+}
+add_filter( 'rest_prepare_post', 'my_rest_prepare_post', 10, 3 );
+
+function my_rest_prepare_term( $data, $item, $request ) {
+  $args = array(
+    'tax_query' => array(
+      array(
+        'taxonomy' => $item->taxonomy,
+        'field' => 'slug',
+        'terms' => $item->slug
+      )
+    ),
+    'posts_per_page' => 5
+  );
+  $posts = get_posts( $args );
+  $posts_arr = array();
+  foreach ( $posts as $p ) {
+    $posts_arr[] = array(
+      'ID' => $p->ID,
+      'title' => $p->post_title
+    );
+  }
+  $data->data['posts'] = $posts_arr;
+  return $data;
+}
+add_filter( 'rest_prepare_category', 'my_rest_prepare_term', 10, 3 );
+
 ?>
