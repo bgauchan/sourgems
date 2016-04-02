@@ -59,6 +59,10 @@ function my_rest_prepare_post( $data, $post, $request ) {
   $thumbnail = wp_get_attachment_image_src( $thumbnail_id );
   $_data['featured_image_thumbnail_url'] = $thumbnail[0];
 
+
+  $categories = get_categories();
+  $_data['all_categories'] = $categories;
+
   unset( $_data['author'] );
   unset( $_data['comment_status'] );
   unset( $_data['ping_status'] );

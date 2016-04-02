@@ -6,49 +6,32 @@ var Collections = require('./collections.jsx');
 module.exports = React.createClass({
   handleClick: function(event) {  
 
-    var newLinkName = jQuery(event.target).data('link-name');  
+    var newLinkName = jQuery(event.target).data('link-name'); 
 
     this.setState({   
       linkName: newLinkName
     });
 
-    var url = "";;
+    var url = "";
+    var id = jQuery(event.target).data('id');
 
-    if(event.target.id > 0) {
-      url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
+    console.log(newLinkName);
+
+    if(id > 0) {
+      url = jsonUrl + "/posts?filter[cat]=" + id;
       this.props.onUrlChange(url, event.target.getAttribute('name'));
     } else {
-      if(newLinkName === "fav-posts") {
-        url = jsonUrl + "/posts?filter[tag]=favorite";
-        this.props.onUrlChange(url, "Favorites");
-      } else {
-        url = jsonUrl + "/posts?per_page=30";
-        this.props.onUrlChange(url, "All Posts");
-      }
-
+      url = jsonUrl + "/posts?per_page=30";
+      this.props.onUrlChange(url, "All Posts");
     }
-  },
-  loadCollectionsFromServer: function() {
-    jQuery.ajax({
-      url: homeUrl + "/wp-json/wp/v2/categories?order=desc&orderby=id",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
   },
   getInitialState: function() {
     return {
       linkName: "", // keeps track of the currently selected collection
-      data: []
     };
   },
   componentDidMount: function() {
-    this.loadCollectionsFromServer();
+    // this.loadCollectionsFromServer();
   },
   render: function() {
     
@@ -56,6 +39,20 @@ module.exports = React.createClass({
 
     if(this.state.linkName) {
       activeLink = "active";
+    }
+
+    var collections = [];
+
+    if(this.props.data[0]) {
+      var all_categories = this.props.data[0]["all_categories"]; 
+
+      for (var key in all_categories) {
+        // skip loop if the property is from prototype
+        if (!all_categories.hasOwnProperty(key)) continue;
+
+        var category = all_categories[key];
+        collections.push(category);
+      }
     }
 
     return (
@@ -76,7 +73,7 @@ module.exports = React.createClass({
             <h5 onClick={this.handleClick}>COLLECTIONS</h5>
           </li>
           {  
-            this.state.data.map(function (collection) {
+            collections.map(function (collection) {    
               activeLink = "";
 
               if(this.state.linkName === collection.name) {
@@ -84,17 +81,30 @@ module.exports = React.createClass({
               }
 
               var text = collection.name + "(" + collection.count + ")";
+              var count = "(" + collection.count + ")";
 
               return (
-                <li data-link-name={collection.name} key={collection.id}>
-                  <span data-link-name={collection.name} 
+                <li data-link-name={collection.name} 
+                    data-id={collection.cat_ID} 
+                    name={collection.name} 
+                    key={collection.cat_ID}>
+                  <div data-link-name={collection.name} 
                         className={activeLink} 
-                        id={collection.id} 
+                        data-id={collection.cat_ID} 
                         name={collection.name} 
                         onClick={this.handleClick}>
-                    {collection.name}
-                    <label>( {collection.count} )</label>
-                  </span>
+                    <span 
+                        data-link-name={collection.name}
+                        data-id={collection.cat_ID}
+                        name={collection.name}>
+                        {collection.name}</span>
+                    <span
+                        data-link-name={collection.name}
+                        data-id={collection.cat_ID}
+                        name={collection.name}
+                        className="count">
+                        {count}</span>
+                  </div>
                 </li>
               );
             }.bind(this))

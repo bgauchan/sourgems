@@ -12,7 +12,7 @@ var Home = React.createClass({
       data: []
     };
   },
-  handleUrlChange: function(newUrl, newPageTitle) {
+  handleUrlChange: function(newUrl, newPageTitle) { 
     this.loadPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
@@ -24,7 +24,7 @@ var Home = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        this.setState({data: data});      
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -37,7 +37,9 @@ var Home = React.createClass({
   render: function() {
     return (
       <div className="app">
-        <Sidebar onUrlChange={this.handleUrlChange} />
+        <Sidebar 
+            data={this.state.data} 
+            onUrlChange={this.handleUrlChange} />
         <section className="content">
           <Nav 
             pageTitle={this.state.pageTitle} 

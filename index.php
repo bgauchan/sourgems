@@ -26,7 +26,6 @@
 
 <?php wp_head(); ?>
 
-<script src="https://npmcdn.com/masonry-layout@4.0/dist/masonry.pkgd.min.js"></script>
 <script type="text/javascript" src="wp-content/themes/sourgems/jquery.js"></script>
 <script type="text/javascript">
 	var themeUrl = '<?= get_bloginfo("template_url"); ?>';

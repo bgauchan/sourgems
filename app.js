@@ -88,7 +88,7 @@ var Home = React.createClass({displayName: "Home",
       data: []
     };
   },
-  handleUrlChange: function(newUrl, newPageTitle) {
+  handleUrlChange: function(newUrl, newPageTitle) { 
     this.loadPostsFromServer(newUrl);
     this.setState({   
       pageTitle: newPageTitle
@@ -100,7 +100,7 @@ var Home = React.createClass({displayName: "Home",
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});
+        this.setState({data: data});      
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
@@ -113,7 +113,9 @@ var Home = React.createClass({displayName: "Home",
   render: function() {
     return (
       React.createElement("div", {className: "app"}, 
-        React.createElement(Sidebar, {onUrlChange: this.handleUrlChange}), 
+        React.createElement(Sidebar, {
+            data: this.state.data, 
+            onUrlChange: this.handleUrlChange}), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, {
             pageTitle: this.state.pageTitle, 
@@ -218,8 +220,8 @@ module.exports = React.createClass({displayName: "exports",
 	          		React.createElement("li", {className: "hidden-nav"}, "Images"), 
 	          		React.createElement("li", {className: "hidden-nav"}, "Notes"), 
 	          		React.createElement("li", {className: "hidden-nav"}, "Articles")
-				)
-			)
+    				)
+    			)
         )
       )
     );
@@ -317,7 +319,7 @@ var Post = React.createClass({displayName: "Post",
     var favImgUrl = themeUrl + "/images/fav.svg";
 
     // use the post excerpt if the content is too long
-    if (content.length > 500) {
+    if(content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
     } 
 
@@ -359,49 +361,32 @@ var Collections = require('./collections.jsx');
 module.exports = React.createClass({displayName: "exports",
   handleClick: function(event) {  
 
-    var newLinkName = jQuery(event.target).data('link-name');  
+    var newLinkName = jQuery(event.target).data('link-name'); 
 
     this.setState({   
       linkName: newLinkName
     });
 
-    var url = "";;
+    var url = "";
+    var id = jQuery(event.target).data('id');
 
-    if(event.target.id > 0) {
-      url = jsonUrl + "/posts?filter[cat]=" + event.target.id;
+    console.log(newLinkName);
+
+    if(id > 0) {
+      url = jsonUrl + "/posts?filter[cat]=" + id;
       this.props.onUrlChange(url, event.target.getAttribute('name'));
     } else {
-      if(newLinkName === "fav-posts") {
-        url = jsonUrl + "/posts?filter[tag]=favorite";
-        this.props.onUrlChange(url, "Favorites");
-      } else {
-        url = jsonUrl + "/posts?per_page=30";
-        this.props.onUrlChange(url, "All Posts");
-      }
-
+      url = jsonUrl + "/posts?per_page=30";
+      this.props.onUrlChange(url, "All Posts");
     }
-  },
-  loadCollectionsFromServer: function() {
-    jQuery.ajax({
-      url: homeUrl + "/wp-json/wp/v2/categories?order=desc&orderby=id",
-      dataType: 'json',
-      cache: false,
-      success: function(data) {
-        this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
-        console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
   },
   getInitialState: function() {
     return {
       linkName: "", // keeps track of the currently selected collection
-      data: []
     };
   },
   componentDidMount: function() {
-    this.loadCollectionsFromServer();
+    // this.loadCollectionsFromServer();
   },
   render: function() {
     
@@ -409,6 +394,20 @@ module.exports = React.createClass({displayName: "exports",
 
     if(this.state.linkName) {
       activeLink = "active";
+    }
+
+    var collections = [];
+
+    if(this.props.data[0]) {
+      var all_categories = this.props.data[0]["all_categories"]; 
+
+      for (var key in all_categories) {
+        // skip loop if the property is from prototype
+        if (!all_categories.hasOwnProperty(key)) continue;
+
+        var category = all_categories[key];
+        collections.push(category);
+      }
     }
 
     return (
@@ -429,7 +428,7 @@ module.exports = React.createClass({displayName: "exports",
             React.createElement("h5", {onClick: this.handleClick}, "COLLECTIONS")
           ), 
             
-            this.state.data.map(function (collection) {
+            collections.map(function (collection) {    
               activeLink = "";
 
               if(this.state.linkName === collection.name) {
@@ -437,16 +436,29 @@ module.exports = React.createClass({displayName: "exports",
               }
 
               var text = collection.name + "(" + collection.count + ")";
+              var count = "(" + collection.count + ")";
 
               return (
-                React.createElement("li", {"data-link-name": collection.name, key: collection.id}, 
-                  React.createElement("span", {"data-link-name": collection.name, 
+                React.createElement("li", {"data-link-name": collection.name, 
+                    "data-id": collection.cat_ID, 
+                    name: collection.name, 
+                    key: collection.cat_ID}, 
+                  React.createElement("div", {"data-link-name": collection.name, 
                         className: activeLink, 
-                        id: collection.id, 
+                        "data-id": collection.cat_ID, 
                         name: collection.name, 
                         onClick: this.handleClick}, 
-                    collection.name, 
-                    React.createElement("label", null, "( ", collection.count, " )")
+                    React.createElement("span", {
+                        "data-link-name": collection.name, 
+                        "data-id": collection.cat_ID, 
+                        name: collection.name}, 
+                        collection.name), 
+                    React.createElement("span", {
+                        "data-link-name": collection.name, 
+                        "data-id": collection.cat_ID, 
+                        name: collection.name, 
+                        className: "count"}, 
+                        count)
                   )
                 )
               );

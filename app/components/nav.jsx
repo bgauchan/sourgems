@@ -30,8 +30,8 @@ module.exports = React.createClass({
 	          		<li className="hidden-nav">Images</li>
 	          		<li className="hidden-nav">Notes</li>
 	          		<li className="hidden-nav">Articles</li>
-				</ul>
-			</div>
+    				</ul>
+    			</div>
         </section>
       </nav>
     );

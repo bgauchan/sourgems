@@ -88,7 +88,7 @@ var Post = React.createClass({
     var favImgUrl = themeUrl + "/images/fav.svg";
 
     // use the post excerpt if the content is too long
-    if (content.length > 500) {
+    if(content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
     } 
 
