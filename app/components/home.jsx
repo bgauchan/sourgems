@@ -9,13 +9,14 @@ var Home = React.createClass({
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
       pageTitle: "All Posts",
+      currentCollectionID: -1,
       data: []
     };
   },
-  handleUrlChange: function(newUrl, newPageTitle) { 
-    this.loadPostsFromServer(newUrl);
+  handleUrlChange: function(collectionID, newPageTitle) {     
     this.setState({   
-      pageTitle: newPageTitle
+      pageTitle: newPageTitle,
+      currentCollectionID: collectionID
     });
   },
   loadPostsFromServer: function(url) {
@@ -47,6 +48,7 @@ var Home = React.createClass({
             onUrlChange={this.handleUrlChange} />
           <Posts 
             data={this.state.data} 
+            currentCollectionID={this.state.currentCollectionID}
             jsonUrl={this.state.jsonUrl} />
         </section>
       </div>

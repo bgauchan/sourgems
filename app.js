@@ -85,13 +85,14 @@ var Home = React.createClass({displayName: "Home",
     return {
       jsonUrl: jsonUrl + "/posts?per_page=30",
       pageTitle: "All Posts",
+      currentCollectionID: -1,
       data: []
     };
   },
-  handleUrlChange: function(newUrl, newPageTitle) { 
-    this.loadPostsFromServer(newUrl);
+  handleUrlChange: function(collectionID, newPageTitle) {     
     this.setState({   
-      pageTitle: newPageTitle
+      pageTitle: newPageTitle,
+      currentCollectionID: collectionID
     });
   },
   loadPostsFromServer: function(url) {
@@ -123,6 +124,7 @@ var Home = React.createClass({displayName: "Home",
             onUrlChange: this.handleUrlChange}), 
           React.createElement(Posts, {
             data: this.state.data, 
+            currentCollectionID: this.state.currentCollectionID, 
             jsonUrl: this.state.jsonUrl})
         )
       )
@@ -233,7 +235,37 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   render: function() {
-    var posts = this.props.data.map(function (post) {
+
+    var collectionID = this.props.currentCollectionID;
+    var filteredPosts = [];
+
+    // -1 is default so if it's that then filtered posts is basically all posts
+    // but if it has a valid collection ID, then only show posts that match
+    // that collection ID
+    if(collectionID > -1) {
+      for(var key in this.props.data) {
+        // skip loop if the property is from prototype
+        if (!this.props.data.hasOwnProperty(key)) continue;
+
+        var post = this.props.data[key];
+
+        for(var key2 in post.categories) {
+          // skip loop if the property is from prototype
+          if (!post.categories.hasOwnProperty(key2)) continue;
+
+          var category = post.categories[key2];
+
+          if(category.ID == collectionID) {
+            filteredPosts.push(post);            
+          }
+
+        }    
+      }
+    } else {
+      filteredPosts = this.props.data;
+    }
+
+    var posts = filteredPosts.map(function (post) {
       return (
         React.createElement(Post, {data: post, key: post.id})
       );
@@ -367,17 +399,12 @@ module.exports = React.createClass({displayName: "exports",
       linkName: newLinkName
     });
 
-    var url = "";
-    var id = jQuery(event.target).data('id');
+    var collectionID = jQuery(event.target).data('id');
 
-    console.log(newLinkName);
-
-    if(id > 0) {
-      url = jsonUrl + "/posts?filter[cat]=" + id;
-      this.props.onUrlChange(url, event.target.getAttribute('name'));
+    if(collectionID > 0) {
+      this.props.onUrlChange(collectionID, event.target.getAttribute('name'));
     } else {
-      url = jsonUrl + "/posts?per_page=30";
-      this.props.onUrlChange(url, "All Posts");
+      this.props.onUrlChange(-1, "All Posts");
     }
   },
   getInitialState: function() {

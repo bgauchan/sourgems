@@ -12,17 +12,12 @@ module.exports = React.createClass({
       linkName: newLinkName
     });
 
-    var url = "";
-    var id = jQuery(event.target).data('id');
+    var collectionID = jQuery(event.target).data('id');
 
-    console.log(newLinkName);
-
-    if(id > 0) {
-      url = jsonUrl + "/posts?filter[cat]=" + id;
-      this.props.onUrlChange(url, event.target.getAttribute('name'));
+    if(collectionID > 0) {
+      this.props.onUrlChange(collectionID, event.target.getAttribute('name'));
     } else {
-      url = jsonUrl + "/posts?per_page=30";
-      this.props.onUrlChange(url, "All Posts");
+      this.props.onUrlChange(-1, "All Posts");
     }
   },
   getInitialState: function() {

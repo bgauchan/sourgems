@@ -2,7 +2,37 @@ var React = require('react');
 
 module.exports = React.createClass({
   render: function() {
-    var posts = this.props.data.map(function (post) {
+
+    var collectionID = this.props.currentCollectionID;
+    var filteredPosts = [];
+
+    // -1 is default so if it's that then filtered posts is basically all posts
+    // but if it has a valid collection ID, then only show posts that match
+    // that collection ID
+    if(collectionID > -1) {
+      for(var key in this.props.data) {
+        // skip loop if the property is from prototype
+        if (!this.props.data.hasOwnProperty(key)) continue;
+
+        var post = this.props.data[key];
+
+        for(var key2 in post.categories) {
+          // skip loop if the property is from prototype
+          if (!post.categories.hasOwnProperty(key2)) continue;
+
+          var category = post.categories[key2];
+
+          if(category.ID == collectionID) {
+            filteredPosts.push(post);            
+          }
+
+        }    
+      }
+    } else {
+      filteredPosts = this.props.data;
+    }
+
+    var posts = filteredPosts.map(function (post) {
       return (
         <Post data={post} key={post.id} />
       );
