@@ -30,7 +30,6 @@
 <script type="text/javascript">
 	var themeUrl = '<?= get_bloginfo("template_url"); ?>';
 	var homeUrl = '<?php echo get_site_url(); ?>';
-
 	var jsonUrl = homeUrl + "/wp-json/wp/v2";
 </script>
 </head>

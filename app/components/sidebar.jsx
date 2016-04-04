@@ -1,7 +1,5 @@
 
 var React = require('react');
-var Links = require('./links.jsx');
-var Collections = require('./collections.jsx');
 
 module.exports = React.createClass({
   handleClick: function(event) {  
@@ -25,18 +23,14 @@ module.exports = React.createClass({
       linkName: "", // keeps track of the currently selected collection
     };
   },
-  componentDidMount: function() {
-    // this.loadCollectionsFromServer();
-  },
   render: function() {
     
-    var activeLink;
+    var activeLink;    
+    var collections = [];
 
     if(this.state.linkName) {
       activeLink = "active";
     }
-
-    var collections = [];
 
     if(this.props.data[0]) {
       var all_categories = this.props.data[0]["all_categories"]; 
@@ -81,10 +75,11 @@ module.exports = React.createClass({
               return (
                 <li data-link-name={collection.name} 
                     data-id={collection.cat_ID} 
+                    className={activeLink} 
                     name={collection.name} 
-                    key={collection.cat_ID}>
+                    key={collection.cat_ID}
+                    onClick={this.handleClick}>
                   <div data-link-name={collection.name} 
-                        className={activeLink} 
                         data-id={collection.cat_ID} 
                         name={collection.name} 
                         onClick={this.handleClick}>
