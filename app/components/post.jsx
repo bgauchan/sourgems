@@ -11,7 +11,7 @@ module.exports = React.createClass({
     for(var i = 0; i < tags.length; i++) {
       if(tags[i]["name"] === "favorite") {
         fav = true;
-      }      
+      }
     }
 
     return {
@@ -22,7 +22,7 @@ module.exports = React.createClass({
 
     var nameOfClass = event.target.getAttribute('class');
 
-    if(nameOfClass === "overlay-icons" 
+    if(nameOfClass === "overlay-icons"
         || nameOfClass === "fav-icon"
         || nameOfClass === "fav-icon active"
         || nameOfClass === "send-icon"
@@ -42,7 +42,7 @@ module.exports = React.createClass({
     var postID = jQuery(event.target).data('postid');
     var isPostFav = this.state.isPostFav;
     var tagsArr = this.props.data.tags;
-      
+
     var newTags = [];
 
     // loop through tags of this post to just get the ID's of tags
@@ -61,9 +61,9 @@ module.exports = React.createClass({
 
     tagsArr = newTags; // assign it back to the old array
 
-    if(!isPostFav) {     
+    if(!isPostFav) {
       // if it's not a fav post, then add fav tag to it
-      tagsArr.push(this.props.favTag.ID); 
+      tagsArr.push(this.props.favTag.ID);
     }
 
     // make the request to update the post with new tags
@@ -89,10 +89,28 @@ module.exports = React.createClass({
     console.log("sent");
   },
   deletePost: function(event) {
-    console.log("deleted");
+    var postID = jQuery(event.target).data('postid');
+    var _this = this;
+
+    var result = confirm("Are you sure you want to delete this post?");
+    if (result) {
+      jQuery.ajax({
+        method: "DELETE",
+        url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
+        beforeSend: function ( xhr ) {
+          xhr.setRequestHeader( 'X-WP-Nonce', AUTH.nonce );
+        },
+        success : function( response ) {
+          console.log("successfully deleted");
+          _this.props.filter(-1, "All Posts");
+        },
+        fail : function( response ) {
+          console.log( "fail => " + response );
+        }
+      });
+    }
   },
   render: function() {
-
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
 
@@ -102,13 +120,13 @@ module.exports = React.createClass({
     // use the post excerpt if the content is too long
     if(content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
-    } 
+    }
 
     // checks to see if there's only one link (and then if its a pdf link)
     if((content.match(/<a href=/g) || []).length == 1) {
       if(content.indexOf(".pdf") > -1) {
-        content = "<div class='pdf icon-holder'>" + 
-                    "<img class='pdf-icon' src='" + themeUrl + "/images/pdf-2.svg' alt='pdf icon' />" +                     
+        content = "<div class='pdf icon-holder'>" +
+                    "<img class='pdf-icon' src='" + themeUrl + "/images/pdf-2.svg' alt='pdf icon' />" +
                   "</div>" + content;
       }
     }
@@ -125,8 +143,8 @@ module.exports = React.createClass({
         <div className="" dangerouslySetInnerHTML={{__html: content}} />
         <div className="overlay-icons" onClick={this.handleClick}>
           <div data-postid={this.props.data.id} className={favClassName} onClick={this.favPost}></div>
-          <div className="send-icon" onClick={this.sendPost}></div>
-          <div className="delete-icon" onClick={this.deletePost}></div>
+          <div data-postid={this.props.data.id} className="send-icon" onClick={this.sendPost}></div>
+          <div data-postid={this.props.data.id} className="delete-icon" onClick={this.deletePost}></div>
         </div>
       </div>
     );

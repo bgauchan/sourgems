@@ -31,7 +31,8 @@ var Home = React.createClass({displayName: "Home",
       data: []
     };
   },
-  handleCollectionChange: function(collectionID, newPageTitle) {
+  handleFiltering: function(collectionID, newPageTitle) {
+    this.loadPostsFromServer(this.state.jsonUrl);
     this.setState({
       pageTitle: newPageTitle,
       currentCollectionID: collectionID
@@ -64,7 +65,7 @@ var Home = React.createClass({displayName: "Home",
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, {
             data: this.state.data, 
-            onUrlChange: this.handleCollectionChange}), 
+            filter: this.handleFiltering}), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, {
             pageTitle: this.state.pageTitle, 
@@ -73,7 +74,8 @@ var Home = React.createClass({displayName: "Home",
           React.createElement(Posts, {
             data: this.state.data, 
             currentCollectionID: this.state.currentCollectionID, 
-            jsonUrl: this.state.jsonUrl})
+            jsonUrl: this.state.jsonUrl, 
+            filter: this.handleFiltering})
         )
       )
     );
@@ -146,7 +148,7 @@ module.exports = React.createClass({displayName: "exports",
     for(var i = 0; i < tags.length; i++) {
       if(tags[i]["name"] === "favorite") {
         fav = true;
-      }      
+      }
     }
 
     return {
@@ -157,7 +159,7 @@ module.exports = React.createClass({displayName: "exports",
 
     var nameOfClass = event.target.getAttribute('class');
 
-    if(nameOfClass === "overlay-icons" 
+    if(nameOfClass === "overlay-icons"
         || nameOfClass === "fav-icon"
         || nameOfClass === "fav-icon active"
         || nameOfClass === "send-icon"
@@ -177,7 +179,7 @@ module.exports = React.createClass({displayName: "exports",
     var postID = jQuery(event.target).data('postid');
     var isPostFav = this.state.isPostFav;
     var tagsArr = this.props.data.tags;
-      
+
     var newTags = [];
 
     // loop through tags of this post to just get the ID's of tags
@@ -196,9 +198,9 @@ module.exports = React.createClass({displayName: "exports",
 
     tagsArr = newTags; // assign it back to the old array
 
-    if(!isPostFav) {     
+    if(!isPostFav) {
       // if it's not a fav post, then add fav tag to it
-      tagsArr.push(this.props.favTag.ID); 
+      tagsArr.push(this.props.favTag.ID);
     }
 
     // make the request to update the post with new tags
@@ -224,10 +226,28 @@ module.exports = React.createClass({displayName: "exports",
     console.log("sent");
   },
   deletePost: function(event) {
-    console.log("deleted");
+    var postID = jQuery(event.target).data('postid');
+    var _this = this;
+
+    var result = confirm("Are you sure you want to delete this post?");
+    if (result) {
+      jQuery.ajax({
+        method: "DELETE",
+        url: homeUrl + "/wp-json/wp/v2/posts/" + postID,
+        beforeSend: function ( xhr ) {
+          xhr.setRequestHeader( 'X-WP-Nonce', AUTH.nonce );
+        },
+        success : function( response ) {
+          console.log("successfully deleted");
+          _this.props.filter(-1, "All Posts");
+        },
+        fail : function( response ) {
+          console.log( "fail => " + response );
+        }
+      });
+    }
   },
   render: function() {
-
     var content = this.props.data.content.rendered;
     var title = this.props.data.title.rendered;
 
@@ -237,13 +257,13 @@ module.exports = React.createClass({displayName: "exports",
     // use the post excerpt if the content is too long
     if(content.length > 500) {
       content = this.props.data.excerpt.rendered.substring(0, 200) + "...";
-    } 
+    }
 
     // checks to see if there's only one link (and then if its a pdf link)
     if((content.match(/<a href=/g) || []).length == 1) {
       if(content.indexOf(".pdf") > -1) {
-        content = "<div class='pdf icon-holder'>" + 
-                    "<img class='pdf-icon' src='" + themeUrl + "/images/pdf-2.svg' alt='pdf icon' />" +                     
+        content = "<div class='pdf icon-holder'>" +
+                    "<img class='pdf-icon' src='" + themeUrl + "/images/pdf-2.svg' alt='pdf icon' />" +
                   "</div>" + content;
       }
     }
@@ -260,8 +280,8 @@ module.exports = React.createClass({displayName: "exports",
         React.createElement("div", {className: "", dangerouslySetInnerHTML: {__html: content}}), 
         React.createElement("div", {className: "overlay-icons", onClick: this.handleClick}, 
           React.createElement("div", {"data-postid": this.props.data.id, className: favClassName, onClick: this.favPost}), 
-          React.createElement("div", {className: "send-icon", onClick: this.sendPost}), 
-          React.createElement("div", {className: "delete-icon", onClick: this.deletePost})
+          React.createElement("div", {"data-postid": this.props.data.id, className: "send-icon", onClick: this.sendPost}), 
+          React.createElement("div", {"data-postid": this.props.data.id, className: "delete-icon", onClick: this.deletePost})
         )
       )
     );
@@ -293,7 +313,7 @@ module.exports = React.createClass({displayName: "exports",
       for(var i = 0; i < tags.length; i++) {
         if(tags[i]["name"] === "favorite") {
           favTag = tags[i];
-        }      
+        }
       }
     }
 
@@ -321,10 +341,10 @@ module.exports = React.createClass({displayName: "exports",
           var category = post.categories[key2];
 
           if(category.ID == collectionID) {
-            filteredPosts.push(post);            
+            filteredPosts.push(post);
           }
 
-        }    
+        }
       }
     } else {
       filteredPosts = this.props.data;
@@ -333,13 +353,15 @@ module.exports = React.createClass({displayName: "exports",
     return filteredPosts;
   },
   render: function() {
+    var _this = this;
     var favTag = this.getFavTag();
 
     var posts = this.filterPosts().map(function (post) {
       return (
         React.createElement(Post, {data: post, 
               key: post.id, 
-              favTag: favTag})
+              favTag: favTag, 
+              filter: _this.props.filter})
       );
     });
 
@@ -356,20 +378,20 @@ module.exports = React.createClass({displayName: "exports",
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
-  handleClick: function(event) {  
+  handleClick: function(event) {
 
-    var newLinkName = jQuery(event.target).data('link-name'); 
+    var newLinkName = jQuery(event.target).data('link-name');
 
-    this.setState({   
+    this.setState({
       linkName: newLinkName
     });
 
     var collectionID = jQuery(event.target).data('id');
 
     if(collectionID > 0) {
-      this.props.onUrlChange(collectionID, event.target.getAttribute('name'));
+      this.props.filter(collectionID, event.target.getAttribute('name'));
     } else {
-      this.props.onUrlChange(-1, "All Posts");
+      this.props.filter(-1, "All Posts");
     }
   },
   getInitialState: function() {
@@ -378,8 +400,8 @@ module.exports = React.createClass({displayName: "exports",
     };
   },
   render: function() {
-    
-    var activeLink;    
+
+    var activeLink;
     var collections = [];
 
     if(this.state.linkName) {
@@ -387,7 +409,7 @@ module.exports = React.createClass({displayName: "exports",
     }
 
     if(this.props.data[0]) {
-      var all_categories = this.props.data[0]["all_categories"]; 
+      var all_categories = this.props.data[0]["all_categories"];
 
       for (var key in all_categories) {
         // skip loop if the property is from prototype
@@ -415,8 +437,8 @@ module.exports = React.createClass({displayName: "exports",
           React.createElement("li", null, 
             React.createElement("h5", {onClick: this.handleClick}, "COLLECTIONS")
           ), 
-            
-            collections.map(function (collection) {    
+          
+            collections.map(function (collection) {
               activeLink = "";
 
               if(this.state.linkName === collection.name) {

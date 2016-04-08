@@ -13,7 +13,8 @@ var Home = React.createClass({
       data: []
     };
   },
-  handleCollectionChange: function(collectionID, newPageTitle) {
+  handleFiltering: function(collectionID, newPageTitle) {
+    this.loadPostsFromServer(this.state.jsonUrl);
     this.setState({
       pageTitle: newPageTitle,
       currentCollectionID: collectionID
@@ -46,7 +47,7 @@ var Home = React.createClass({
       <div className="app">
         <Sidebar
             data={this.state.data}
-            onUrlChange={this.handleCollectionChange} />
+            filter={this.handleFiltering} />
         <section className="content">
           <Nav
             pageTitle={this.state.pageTitle}
@@ -55,7 +56,8 @@ var Home = React.createClass({
           <Posts
             data={this.state.data}
             currentCollectionID={this.state.currentCollectionID}
-            jsonUrl={this.state.jsonUrl} />
+            jsonUrl={this.state.jsonUrl}
+            filter={this.handleFiltering} />
         </section>
       </div>
     );

@@ -2,20 +2,20 @@
 var React = require('react');
 
 module.exports = React.createClass({
-  handleClick: function(event) {  
+  handleClick: function(event) {
 
-    var newLinkName = jQuery(event.target).data('link-name'); 
+    var newLinkName = jQuery(event.target).data('link-name');
 
-    this.setState({   
+    this.setState({
       linkName: newLinkName
     });
 
     var collectionID = jQuery(event.target).data('id');
 
     if(collectionID > 0) {
-      this.props.onUrlChange(collectionID, event.target.getAttribute('name'));
+      this.props.filter(collectionID, event.target.getAttribute('name'));
     } else {
-      this.props.onUrlChange(-1, "All Posts");
+      this.props.filter(-1, "All Posts");
     }
   },
   getInitialState: function() {
@@ -24,8 +24,8 @@ module.exports = React.createClass({
     };
   },
   render: function() {
-    
-    var activeLink;    
+
+    var activeLink;
     var collections = [];
 
     if(this.state.linkName) {
@@ -33,7 +33,7 @@ module.exports = React.createClass({
     }
 
     if(this.props.data[0]) {
-      var all_categories = this.props.data[0]["all_categories"]; 
+      var all_categories = this.props.data[0]["all_categories"];
 
       for (var key in all_categories) {
         // skip loop if the property is from prototype
@@ -50,19 +50,19 @@ module.exports = React.createClass({
           <img src={ themeUrl + "/images/logo.png" } alt="logo" />
         </div>
         <ul className="links">
-          <li data-link-name="" 
-            className={this.state.linkName === "" && "active"} 
+          <li data-link-name=""
+            className={this.state.linkName === "" && "active"}
             onClick={this.handleClick}>
-            <img data-link-name="" src={ themeUrl + "/images/all-posts.svg" } alt="all posts icon" />             
-            <h5 data-link-name="">All Posts</h5> 
+            <img data-link-name="" src={ themeUrl + "/images/all-posts.svg" } alt="all posts icon" />
+            <h5 data-link-name="">All Posts</h5>
           </li>
         </ul>
         <ul className="collections">
           <li>
             <h5 onClick={this.handleClick}>COLLECTIONS</h5>
           </li>
-          {  
-            collections.map(function (collection) {    
+          {
+            collections.map(function (collection) {
               activeLink = "";
 
               if(this.state.linkName === collection.name) {
@@ -73,17 +73,17 @@ module.exports = React.createClass({
               var count = "(" + collection.count + ")";
 
               return (
-                <li data-link-name={collection.name} 
-                    data-id={collection.cat_ID} 
-                    className={activeLink} 
-                    name={collection.name} 
+                <li data-link-name={collection.name}
+                    data-id={collection.cat_ID}
+                    className={activeLink}
+                    name={collection.name}
                     key={collection.cat_ID}
                     onClick={this.handleClick}>
-                  <div data-link-name={collection.name} 
-                        data-id={collection.cat_ID} 
-                        name={collection.name} 
+                  <div data-link-name={collection.name}
+                        data-id={collection.cat_ID}
+                        name={collection.name}
                         onClick={this.handleClick}>
-                    <span 
+                    <span
                         data-link-name={collection.name}
                         data-id={collection.cat_ID}
                         name={collection.name}>

@@ -22,7 +22,7 @@ module.exports = React.createClass({
       for(var i = 0; i < tags.length; i++) {
         if(tags[i]["name"] === "favorite") {
           favTag = tags[i];
-        }      
+        }
       }
     }
 
@@ -50,10 +50,10 @@ module.exports = React.createClass({
           var category = post.categories[key2];
 
           if(category.ID == collectionID) {
-            filteredPosts.push(post);            
+            filteredPosts.push(post);
           }
 
-        }    
+        }
       }
     } else {
       filteredPosts = this.props.data;
@@ -62,13 +62,15 @@ module.exports = React.createClass({
     return filteredPosts;
   },
   render: function() {
+    var _this = this;
     var favTag = this.getFavTag();
 
     var posts = this.filterPosts().map(function (post) {
       return (
-        <Post data={post} 
-              key={post.id} 
-              favTag={favTag}/>
+        <Post data={post}
+              key={post.id}
+              favTag={favTag}
+              filter={_this.props.filter}/>
       );
     });
 
