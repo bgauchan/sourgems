@@ -13,10 +13,16 @@ var Home = React.createClass({
       data: []
     };
   },
-  handleUrlChange: function(collectionID, newPageTitle) {     
-    this.setState({   
+  handleCollectionChange: function(collectionID, newPageTitle) {
+    this.setState({
       pageTitle: newPageTitle,
       currentCollectionID: collectionID
+    });
+  },
+  handleUrlChange: function(url, newPageTitle) {
+    this.loadPostsFromServer(url);
+    this.setState({
+      pageTitle: newPageTitle
     });
   },
   loadPostsFromServer: function(url) {
@@ -25,29 +31,29 @@ var Home = React.createClass({
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});      
+        this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
-  componentDidMount: function() {    
+  componentDidMount: function() {
     this.loadPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
     return (
       <div className="app">
-        <Sidebar 
-            data={this.state.data} 
-            onUrlChange={this.handleUrlChange} />
+        <Sidebar
+            data={this.state.data}
+            onUrlChange={this.handleCollectionChange} />
         <section className="content">
-          <Nav 
-            pageTitle={this.state.pageTitle} 
-            jsonUrl={this.state.jsonUrl} 
+          <Nav
+            pageTitle={this.state.pageTitle}
+            jsonUrl={this.state.jsonUrl}
             onUrlChange={this.handleUrlChange} />
-          <Posts 
-            data={this.state.data} 
+          <Posts
+            data={this.state.data}
             currentCollectionID={this.state.currentCollectionID}
             jsonUrl={this.state.jsonUrl} />
         </section>

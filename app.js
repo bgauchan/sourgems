@@ -31,10 +31,16 @@ var Home = React.createClass({displayName: "Home",
       data: []
     };
   },
-  handleUrlChange: function(collectionID, newPageTitle) {     
-    this.setState({   
+  handleCollectionChange: function(collectionID, newPageTitle) {
+    this.setState({
       pageTitle: newPageTitle,
       currentCollectionID: collectionID
+    });
+  },
+  handleUrlChange: function(url, newPageTitle) {
+    this.loadPostsFromServer(url);
+    this.setState({
+      pageTitle: newPageTitle
     });
   },
   loadPostsFromServer: function(url) {
@@ -43,14 +49,14 @@ var Home = React.createClass({displayName: "Home",
       dataType: 'json',
       cache: false,
       success: function(data) {
-        this.setState({data: data});      
+        this.setState({data: data});
       }.bind(this),
       error: function(xhr, status, err) {
         console.error(this.props.url, status, err.toString());
       }.bind(this)
     });
   },
-  componentDidMount: function() {    
+  componentDidMount: function() {
     this.loadPostsFromServer(this.state.jsonUrl);
   },
   render: function() {
@@ -58,7 +64,7 @@ var Home = React.createClass({displayName: "Home",
       React.createElement("div", {className: "app"}, 
         React.createElement(Sidebar, {
             data: this.state.data, 
-            onUrlChange: this.handleUrlChange}), 
+            onUrlChange: this.handleCollectionChange}), 
         React.createElement("section", {className: "content"}, 
           React.createElement(Nav, {
             pageTitle: this.state.pageTitle, 
@@ -87,12 +93,15 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
   searchPosts: function(event) {
+    var url = "";
+
     if(event && event.keyCode == 13) // 13 == return/enter
     {
-      var url = this.props.jsonUrl + "&search=" + event.target.value;
+      url = this.props.jsonUrl + "&search=" + event.target.value;
       this.props.onUrlChange(url, "Search Results");
-    } 
-    else if(event.target.value === "" && event.keyCode == 8) {  // 8 == delete/backspace
+    }
+    else if(event.target.value === "" && event.keyCode == 8) // 8 == delete/backspace
+    {
       url = this.props.jsonUrl;
       this.props.onUrlChange(url, "All Posts");
     }
