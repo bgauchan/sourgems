@@ -57,7 +57,7 @@
   left: 0;
   text-align: center;
   z-index: 1000;
-  height: 3.2rem;
+  height: 3.4rem;
 
   div {    
     background-size: contain;
@@ -65,37 +65,41 @@
     background-position: center;
     border-right: 1px solid darken(white, 20);
     display: inline-block;
-    margin-top: 0.2rem;
+    margin-top: 0.4rem;
     vertical-align: middle;
     width: 33.33%;
-    height: 1.45rem;
+    height: 1.6rem;
+  }
+
+  div:hover {      
+    .keyframes(expand; {
+      from {
+        background-size: contain;
+      }
+      to {
+        background-size: 1.4rem;
+      }
+    });
+
+    .animation-name(expand);
+    .animation-duration(0.2s);
+    .animation-fill-mode(both);
   }
 
   div.fav-icon {
     background-image: url(../sourgems/images/favorite.svg);
 
-    &.active,
-    &:hover {
+    &.active {
       background-image: url(../sourgems/images/favorite-active.svg);
     }
   }
 
   div.send-icon {
     background-image: url(../sourgems/images/move.svg);
-    height: 1.6rem;
-
-    &:hover {
-      background-image: url(../sourgems/images/move-selected.svg);
-    }
   }
 
   div.delete-icon {
     background-image: url(../sourgems/images/deletee.svg);
-    height: 1.6rem;
-
-    &:hover {
-      background-image: url(../sourgems/images/deletee-active.svg);
-    }
   }
 
   div:last-child {

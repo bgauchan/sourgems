@@ -1,0 +1,49 @@
+
+.translateX(@variable) {
+	transform: translateX(@variable);
+	-webkit-transform: translateX(@variable);
+	-moz-transform: translateX(@variable);
+	-o-transform: translateX(@variable);
+}
+
+.translateY(@variable) {
+	transform: translateY(@variable);
+	-webkit-transform: translateY(@variable);
+	-moz-transform: translateY(@variable);
+	-o-transform: translateY(@variable);
+}
+
+.keyframes(@name; @arguments) {
+	@-moz-keyframes @name { @arguments(); }
+	@-webkit-keyframes @name { @arguments(); }
+	@-o-keyframes @name { @arguments(); }
+	@keyframes @name { @arguments(); }
+}
+
+.animation(@arguments) {
+  animation: @arguments;
+  -webkit-animation: @arguments;
+  -moz-animation: @arguments;
+  -o-animation: @arguments;
+}
+
+.animation-name(@name) {
+	-webkit-animation-name: @name;
+	-moz-animation-name: @name;
+	-o-animation-name: @name;
+	animation-name: @name;
+}
+
+.animation-duration(@duration) {
+  -webkit-animation-duration: @duration;
+  -moz-animation-duration: @duration;
+  -o-animation-duration: @duration;
+  animation-duration: @duration;
+}
+
+.animation-fill-mode(@mode) {
+  -webkit-animation-fill-mode: @mode;
+  -moz-animation-fill-mode: @mode;
+  -o-animation-fill-mode: @mode;
+  animation-fill-mode: @mode;
+}
